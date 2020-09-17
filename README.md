@@ -11,7 +11,7 @@ Tech Stack:
   Expo,
   Firebase Auth,
   Firebase Firestore,
-  Google Maps Geolocator API,
+  Google Maps Geolocator API
 
 
 Features:
