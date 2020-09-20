@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavigationContainer, useNavigation } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
-import { TouchableOpacity, Image } from 'react-native';
+import { TouchableOpacity, Image,YellowBox } from 'react-native';
 import { AppLoading } from 'expo'
 import { useFonts } from 'expo-font'
 
@@ -15,6 +15,15 @@ import EventLocation from './pages/EventLocation'
 import Message from './assets/images/message.png'
 import User from './assets/images/user.png'
 import { styles } from './pages/styles';
+
+import * as firebase from 'firebase';
+import { firebaseConfig } from './firebaseConfig'
+
+if (firebase.apps.length === 0) {
+  firebase.initializeApp(firebaseConfig)
+}
+
+YellowBox.ignoreWarnings(['Setting a timer for a long period of time'])
 
 const Stack = createStackNavigator()
 export default function App() {
