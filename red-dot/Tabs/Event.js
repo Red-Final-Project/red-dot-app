@@ -32,7 +32,7 @@ export default function Tabs({navigation}) {
                 <Image 
                     source={{uri: item.img_url}}
                     style={styles.eventPoster}/>
-                <TouchableOpacity style={styles.eventBtn} onPress={() => navigation.navigate('EventLocation')}>
+                <TouchableOpacity style={styles.eventBtn} onPress={() => navigation.navigate('EventLocation', item)}>
                     <Text style={styles.seeLocationText}>See Location</Text>
                 </TouchableOpacity>
           </View>
