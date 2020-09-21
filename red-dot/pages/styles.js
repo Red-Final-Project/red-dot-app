@@ -323,7 +323,6 @@ export const styles = StyleSheet.create({
   eventTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-
   },
   eventNotes: {
     padding: 10,
@@ -335,11 +334,11 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     resizeMode: 'cover',
-    borderRadius:5
+    borderRadius: 5,
   },
   eventBtn: {
     padding: 8,
-    marginTop:5,
+    marginTop: 5,
     backgroundColor: 'red',
     borderRadius: 5,
     width: '50%',
@@ -375,11 +374,11 @@ export const styles = StyleSheet.create({
     // backgroundColor:'blue',
     // flex:1
   },
-//   cardFooter: {
-//     justifyContent: 'space-between',
-//     flexDirection: 'row',
-//     width: '100%',
-//   },
+  //   cardFooter: {
+  //     justifyContent: 'space-between',
+  //     flexDirection: 'row',
+  //     width: '100%',
+  //   },
   //search page
   searchForm: {
     paddingLeft: 10,
