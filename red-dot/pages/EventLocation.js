@@ -84,7 +84,7 @@ export default function Tabs({ navigation, route }) {
     );
   } else {
     return (
-      <View style={styles.container}>
+      <View style={{}}>
         <MapView
           style={{
             width: '100%',
