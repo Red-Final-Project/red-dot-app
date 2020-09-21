@@ -21,7 +21,6 @@ export default function Profile({navigation}) {
     useEffect(() => {
         getData()
     }, [])
-    console.log(userData)
     const logoutHandler = async () => {
         await clearStorage()
         navigation.navigate('Login')

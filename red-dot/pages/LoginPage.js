@@ -15,8 +15,8 @@ import * as Google from 'expo-google-app-auth'
 import * as Facebook from 'expo-facebook'
 import * as firebase from 'firebase';
 import 'firebase/firestore';
-import {storeData} from '../AsyncStore'
 import {firebaseConfig} from '../firebaseConfig'
+import {storeData} from '../AsyncStore'
 
 if (firebase.apps.length === 0) {
   firebase.initializeApp(firebaseConfig)
@@ -209,7 +209,7 @@ export default function Login({navigation}) {
         .get()
         .then(function(querySnapshot) {
           querySnapshot.forEach(function(doc) {
-            storeData(doc.data())
+            storeData({id: doc.id, ...doc.data()})
           })
         })
         .catch(error => {
