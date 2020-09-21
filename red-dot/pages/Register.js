@@ -6,6 +6,18 @@ import {styles} from './styles'
 
 import DateImage from '../assets/images/calendar.png'
 
+import * as firebase from 'firebase';
+import 'firebase/firestore';
+
+import {firebaseConfig} from '../firebaseConfig'
+// console.log(firebaseConfig)
+
+if (firebase.apps.length === 0) {
+  firebase.initializeApp(firebaseConfig)
+  }
+
+const db = firebase.firestore()
+
 export default function Register({navigation}) {
     const [fullName, setFullName] = useState('')
     const [nameValid, setNameValid] = useState(true)
@@ -20,6 +32,8 @@ export default function Register({navigation}) {
     const [dateValid, setDateValid] = useState(true)
     const [mode, setMode] = useState('date')
     const [show, setShow] = useState(false)
+    
+  console.log(fullName, email, password, bloodType, date, "<<<< ini data")
 
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || date
@@ -65,6 +79,37 @@ export default function Register({navigation}) {
         if(!validation) {
             navigation.navigate('Login')
         }
+
+        firebase
+          .auth()
+          .createUserWithEmailAndPassword(email, password)
+          .then(() => {
+            db
+              .collection("users")
+              .doc(Math.random().toString(36).substring(7))
+              .set({
+                email: email,
+                name: fullName,
+                password:password,
+                bloodType: bloodType,
+                last_donation_date: date,
+                createdAt: Date.now()
+              })
+              .then(function() {
+                console.log("Document successfully written!")
+                navigation.navigate('Login')
+              })
+              .catch(function(error) {
+                console.error("Error writing document: ", error);
+              })
+          })
+          .catch(function(error) {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          // ...
+        });
+
     }
     return(
         <View>

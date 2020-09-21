@@ -14,8 +14,8 @@ export default function Tabs({navigation}) {
                 </TouchableOpacity>
             </View>
             <ScrollView 
-                onScrollBeginDrag={() => navigation.setOptions({tabBarVisible: true})} 
-                onScroll={() => navigation.setOptions({tabBarVisible: false})}
+                // onScrollBeginDrag={() => navigation.setOptions({tabBarVisible: true})} 
+                // onScroll={() => navigation.setOptions({tabBarVisible: false})}
                 style={{marginBottom: 40}}
             >
                 <View style={styles.fluid}>
