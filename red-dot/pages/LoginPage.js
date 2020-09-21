@@ -15,7 +15,7 @@ import * as Google from 'expo-google-app-auth'
 import * as Facebook from 'expo-facebook'
 import * as firebase from 'firebase';
 import 'firebase/firestore';
-
+import {storeData} from '../AsyncStore'
 import {firebaseConfig} from '../firebaseConfig'
 
 if (firebase.apps.length === 0) {
@@ -29,7 +29,7 @@ export default function Login({navigation}) {
   const [password, setPassword] = useState('')
   const [isEmpty, setIsEmpty] = useState(false)
 
-  // console.log(email, password,"<<<< check input data")
+  console.log(email, password,"<<<< check input data")
 
     // ======== LOGIN INTEGRATION
       // https://docs.expo.io/versions/latest/sdk/google/
@@ -158,12 +158,10 @@ export default function Login({navigation}) {
       return false;
     }
   
-
     // https://docs.expo.io/guides/using-firebase/
   // Listen for authentication state to change.
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
-      
       if (user !== null) {
         dbAuth
         .collection("users")
@@ -176,7 +174,6 @@ export default function Login({navigation}) {
         })
         .then(function() {
           console.log("Document successfully written!");
-          
         })
         .catch(function(error) {
           console.error("Error writing document: ", error);
@@ -206,6 +203,18 @@ export default function Login({navigation}) {
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then(() => {
+        dbAuth
+        .collection('users')
+        .where("email", "==", email )
+        .get()
+        .then(function(querySnapshot) {
+          querySnapshot.forEach(function(doc) {
+            storeData(doc.data())
+          })
+        })
+        .catch(error => {
+          console.log(error, 'error find data')
+        })
         navigation.navigate('Tabs')
       })
       .catch(function(error) {
