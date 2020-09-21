@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {View, Text, Image, TouchableOpacity, ScrollView, SafeAreaView} from 'react-native' 
 import { styles } from '../pages/styles'
 
@@ -14,8 +14,6 @@ export default function Tabs({navigation}) {
                 </TouchableOpacity>
             </View>
             <ScrollView 
-                // onScrollBeginDrag={() => navigation.setOptions({tabBarVisible: true})} 
-                // onScroll={() => navigation.setOptions({tabBarVisible: false})}
                 style={{marginBottom: 40}}
             >
                 <View style={styles.fluid}>

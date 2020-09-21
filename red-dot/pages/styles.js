@@ -101,6 +101,17 @@ export const styles = StyleSheet.create({
       borderBottomWidth: 2,
       textAlign: "center"
     },
+    buttonAddImg: {
+        marginTop: 10,
+        backgroundColor: "blue",
+        width: 120,
+        borderRadius: 5
+    },
+    buttonText: {
+        fontSize: 15,
+        color: "white",
+        textAlign: "center"
+    },
     button: {
       marginTop: 50,
       width: 80,
@@ -403,5 +414,32 @@ export const styles = StyleSheet.create({
     requestSearchTextBtn: {
         color: "whitesmoke",
         textAlign: "center"
+    },
+
+    //Profile Description
+
+    profileDescription: {
+        flexDirection: "column",
+        width: "90%",
+        alignItems: "center",
+        marginTop: 20,
+        marginHorizontal: "5%",
+        height: 250,
+        backgroundColor: "whitesmoke",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 7
+        },
+        shadowOpacity: 0.5,
+        shadowRadius: 10,
+        elevation: 20,
+        borderRadius: 5
+    },
+    profil_photo: {
+        marginTop: 10,
+        width: 100,
+        height: 100,
+        borderRadius: 50,
     }
 })

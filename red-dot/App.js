@@ -11,6 +11,7 @@ import Tabs from './pages/Tabs'
 import MessagePage from './pages/Message'
 import AddRequest from './pages/addRequest'
 import EventLocation from './pages/EventLocation'
+import Profile from './pages/Profile'
 
 import Message from './assets/images/message.png'
 import User from './assets/images/user.png'
@@ -64,7 +65,7 @@ export default function App() {
             ),
             headerLeft: () => (
               <TouchableOpacity
-                onPress={() => alert('This is a User Profile button!')}
+                onPress={() => navigation.navigate('Profile')}
                 style={styles.profileBtn}
               >
                 <Image source={User} style={styles.headerImg} />
@@ -119,6 +120,28 @@ export default function App() {
               }
           }}/>
           <Stack.Screen name="EventLocation" component={EventLocation} 
+            options={({navigation}) => ({
+              headerRight: () => (
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('Message')}
+                  style={styles.msgBtn}
+                >
+                  <Image source={Message} style={styles.headerImg} />
+                </TouchableOpacity>
+              ),
+              title: 'red.',
+              headerTitleStyle: {
+                fontFamily: 'Nova-Round',
+                color: 'red',
+                fontSize: 25
+              },
+              headerTintColor: 'black',
+              headerTitleAlign: 'center',
+              headerStyle: {
+                backgroundColor: 'whitesmoke',
+              }
+            })}/>
+            <Stack.Screen name="Profile" component={Profile} 
             options={({navigation}) => ({
               headerRight: () => (
                 <TouchableOpacity
