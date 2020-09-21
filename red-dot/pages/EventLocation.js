@@ -36,12 +36,16 @@ export default function Tabs({ navigation, route }) {
     })();
   }, []);
 
-  useEffect(() => {
-    setLocations(locs(latitude, longitude));
-  }, [latitude, longitude]);
+  // useEffect(() => {
+  //   setLocations({
+  //     latitude: event.location.latitude,
+  //     longitude: event.location.longitude,
+  //   });
+  // }, [latitude, longitude]);
 
   useEffect(() => {
-    // getDirections();
+    getDirections();
+    console.log('called');
   }, [desLatitude, desLongitude]);
 
   const getDirections = async () => {
@@ -75,11 +79,12 @@ export default function Tabs({ navigation, route }) {
   };
 
   const onMarkerPress = (loc) => {
+    console.log(loc, 'main');
     const {
       coords: { latitude: la, longitude: lo },
     } = loc;
-    setDesLatitude(la);
-    setDesLongitude(lo);
+    setDesLatitude(la + latitude);
+    setDesLongitude(lo + longitude);
   };
   if (latitude == null || longitude == null) {
     return (
@@ -89,7 +94,7 @@ export default function Tabs({ navigation, route }) {
     );
   } else {
     return (
-      <View style={{}}>
+      <View style={styles.container}>
         <MapView
           style={{
             width: '100%',
@@ -105,22 +110,54 @@ export default function Tabs({ navigation, route }) {
             longitudeDelta: 0.0421,
           }}
         >
+          {console.log({lon: longitude + event.location.longitude, lant : latitude + event.location.latitude}, 'here')}
+          {console.log({latitude, longitude})}
           <Marker
             coordinate={{
               latitude: event.location.latitude + latitude,
               longitude: event.location.longitude + longitude,
             }}
             title={event.title}
-            // onPress={() =>
-            //   onMarkerPress({
-            //     latitude: latitude + 0.03,
-            //     longitude: longitude + 0.03,
-            //   })
-            // }
+            onPress={() =>
+              onMarkerPress({
+                coords: {
+                  latitude: event.location.latitude,
+                  longitude: event.location.longitude,
+                },
+              })
+            }
             description={`Distance: ${pathDesc.distance} meters, Duration:${(
               pathDesc.duration / 60
             ).toFixed(2)} minutes`}
-          ></Marker>
+          />
+
+          {events.map((event, idx) => {
+            return (
+              <Marker
+                key={idx}
+                coordinate={{
+                  latitude: event.location.latitude + latitude,
+                  longitude: event.location.longitude + longitude,
+                }}
+                title={event.title}
+                onPress={() =>
+                  onMarkerPress({
+                    coords: {
+                      latitude: event.location.latitude,
+                      longitude: event.location.longitude,
+                    },
+                  })
+                }
+                pinColor={'orange'}
+                // opacity={0.5}
+                description={`Distance: ${
+                  pathDesc.distance
+                } meters, Duration:${(pathDesc.duration / 60).toFixed(
+                  2
+                )} minutes`}
+              ></Marker>
+            );
+          })}
 
           {desLatitude && desLongitude && desLatitude && desLongitude && (
             <Polyline
@@ -135,41 +172,3 @@ export default function Tabs({ navigation, route }) {
     );
   }
 }
-
-const locs = (lat, lon) => [
-  {
-    name: 'A',
-    coords: {
-      latitude: lat + Math.random() * 0.03,
-      longitude: lon + Math.random() * 0.03,
-    },
-  },
-  {
-    name: 'B',
-    coords: {
-      latitude: lat + Math.random() * 0.03,
-      longitude: lon + Math.random() * 0.03,
-    },
-  },
-  {
-    name: 'C',
-    coords: {
-      latitude: lat + Math.random() * 0.03,
-      longitude: lon + Math.random() * 0.03,
-    },
-  },
-  {
-    name: 'D',
-    coords: {
-      latitude: lat + Math.random() * 0.03,
-      longitude: lon + Math.random() * 0.03,
-    },
-  },
-  {
-    name: 'E',
-    coords: {
-      latitude: lat + Math.random() * 0.03,
-      longitude: lon + Math.random() * 0.03,
-    },
-  },
-];
