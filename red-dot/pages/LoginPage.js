@@ -29,6 +29,8 @@ export default function Login({navigation}) {
   const [password, setPassword] = useState('')
   const [isEmpty, setIsEmpty] = useState(false)
 
+  // console.log(email, password,"<<<< check input data")
+
     // ======== LOGIN INTEGRATION
       // https://docs.expo.io/versions/latest/sdk/google/
       const signInWithGoogleAsync= async () => {
@@ -200,13 +202,36 @@ export default function Login({navigation}) {
        setIsEmpty(true)
        validation = true
     }
-    if(!validation) {
-       navigation.navigate('Tabs')
-    }
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(() => {
+        navigation.navigate('Tabs')
+      })
+      .catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+      // ...
+      })
+
   }
-  if(!fontsLoaded) {
+  // firebase
+  //     .auth()
+  //     .signInWithEmailAndPassword(email, password)
+  //     .catch(function(error) {
+  //       // Handle Errors here.
+  //       var errorCode = error.code;
+  //       var errorMessage = error.message;
+  //     // ...
+  //     })
+  //   if(!validation) {
+  //      navigation.navigate('Tabs')
+  //   }
+    // }
+    if(!fontsLoaded) {
       return <AppLoading />
-  }
+    }
 
 // ====
   const loginWithFacebook = async () => {
@@ -241,7 +266,7 @@ export default function Login({navigation}) {
                     {isEmpty ? 'No Empty Field!' : ''}
                 </Text>
                 <Text style={styles.emailLabel}>Email:</Text>
-                <TextInput style={styles.emailInput} onChange={setEmail} placeholder="e.g: John@mail.com" />
+                <TextInput style={styles.emailInput} onChangeText={setEmail} placeholder="e.g: John@mail.com" />
                 <Text style={styles.passwordLabel}>Password:</Text>
                 <PasswordInput style={styles.passwordInput} value={password} onChangeText={setPassword} placeholder="Your Password" />
             </View>
