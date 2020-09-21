@@ -13,10 +13,15 @@ export default function Tabs({ navigation, route }) {
   const [desLongitude, setDesLongitude] = useState(null);
   const [path, setPath] = useState([]);
   const [pathDesc, setPathDesc] = useState({});
-  const [event, setEvent] = useState(null);
+  // const [event, setEvent] = useState(null);
+  // const [events, setEvents] = useState(null);
+
+  // setEvent(route.params.event)
+  // setEvents(route.params.events)
+  // console.log(event, '<<<',events);
+  const { event, events } = route.params;
 
   useEffect(() => {
-    setEvent(route.params);
     (async () => {
       let { status } = await Location.requestPermissionsAsync();
       if (status !== 'granted') {
@@ -102,9 +107,9 @@ export default function Tabs({ navigation, route }) {
         >
           <Marker
             coordinate={{
-                latitude: latitude + 0.03,
-                longitude: longitude + 0.03,
-              }}
+              latitude: event.location.latitude + latitude,
+              longitude: event.location.longitude + longitude,
+            }}
             title={event.title}
             // onPress={() =>
             //   onMarkerPress({
