@@ -11,7 +11,7 @@ if (firebase.apps.length === 0) {
     firebase.initializeApp(firebaseConfig)
 }
   
-let dbAuth = firebase.firestore()
+const dbAuth = firebase.firestore()
 export default function Tabs({navigation}) {
     const [posts, setPosts] = useState([])
     const getPosts = () => {

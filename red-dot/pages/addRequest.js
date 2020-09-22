@@ -7,7 +7,6 @@ import 'firebase/firestore';
 import * as firebase from 'firebase';
 import {firebaseConfig} from '../firebaseConfig'
 
-import Tabs from '../Tabs/Home'
 import DateImage from '../assets/images/calendar.png'
 
 if (firebase.apps.length === 0) {
@@ -25,22 +24,36 @@ export default function AddRequest({navigation}) {
     const [mode, setMode] = useState('date')
     const [show, setShow] = useState(false)
     const [description, setDescription] = useState('')
-
+    const [userEmail, setUserEmail] = useState({})
     const [userData, setUserData] = useState({})
+    
     const getData = async () => {
         try {
           const jsonValue = await AsyncStorage.getItem('USER')
-          if(jsonValue) {
-              setUserData(JSON.parse(jsonValue))
-          }
+          setUserEmail(JSON.parse(jsonValue))
         } catch(err) {
           console.log(err)
         }
       }
+
+      const fetchProfil = () => {
+        dbAuth
+        .collection("users")
+        .where("email", "==", userEmail.email)
+        .get()
+        .then(querySnapshot => {
+            querySnapshot.forEach(doc => {
+                setUserData({id: doc.id, ...doc.data()})
+            })
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }
+    // console.log(userData)
     useEffect(() => {
         getData()
     }, [])
-    console.log(userData)
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || date
         setShow(Platform.OS === 'ios')
@@ -79,7 +92,7 @@ export default function AddRequest({navigation}) {
                     deadline: date.toLocaleDateString(),
                     description: description,
                     user: {
-                        _id: userData.id,
+                        id: userData.id,
                         avatar: userData.profile_picture.uri,
                         name: userData.name
                     }
@@ -92,6 +105,9 @@ export default function AddRequest({navigation}) {
             });
             navigation.navigate('Tabs')
         } 
+    }
+    if(userEmail.email && !userData.email) {
+        fetchProfil()
     }
     if(!userData) {
         return (

@@ -441,5 +441,15 @@ export const styles = StyleSheet.create({
         width: 100,
         height: 100,
         borderRadius: 50,
+    },
+    logoutBtn: {
+        backgroundColor: "red",
+        width: 60,
+        borderRadius: 5
+    },
+    logoutText: {
+        color: "whitesmoke",
+        textAlign: "center",
+        alignContent: "center"
     }
 })
