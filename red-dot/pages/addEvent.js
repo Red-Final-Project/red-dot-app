@@ -16,6 +16,8 @@ import { firebaseConfig } from '../firebaseConfig';
 
 import Tabs from '../Tabs/Home';
 import DateImage from '../assets/images/calendar.png';
+import * as ImagePicker from 'expo-image-picker';
+import { color } from 'react-native-reanimated';
 
 if (firebase.apps.length === 0) {
   firebase.initializeApp(firebaseConfig);
@@ -25,8 +27,6 @@ const db = firebase.firestore();
 const eventsRef = db.collection('events');
 
 export default function AddRequest({ navigation, route }) {
-  const [date, setDate] = useState(new Date());
-  const [dateValid, setDateValid] = useState(true);
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
 
@@ -40,10 +40,9 @@ export default function AddRequest({ navigation, route }) {
   const [isImgUrl, setIsImgUrl] = useState(true);
   const [description, setDescription] = useState(null);
   const [isDescription, setIsDescription] = useState(true);
-  const [eventDate, setEventDate] = useState(null);
+  const [eventDate, setEventDate] = useState(new Date());
   const [isEventDate, setIsEventDate] = useState(true);
-  const [createdDate, setCreatedDate] = useState(null);
-  const [isCreatedDate, setIsCreatedDate] = useState(true);
+  const [progress, setProgress] = useState(0);
 
   const [userData, setUserData] = useState({});
 
@@ -59,14 +58,17 @@ export default function AddRequest({ navigation, route }) {
   };
   useEffect(() => {
     // getData();
-    setLatlang(route.params.latLang);
-  }, []);
+    if (route.params) {
+      setLatlang(route.params.latLang);
+    }
+  }, [route]);
 
-  console.log(userData);
+
+  //   console.log(userData);
   const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
+    const currentDate = selectedDate || eventDate;
     setShow(Platform.OS === 'ios');
-    setDate(currentDate);
+    setEventDate(currentDate);
   };
 
   const showMode = (currentMode) => {
@@ -78,6 +80,67 @@ export default function AddRequest({ navigation, route }) {
     showMode('date');
   };
 
+  const openImagePickerAsync = async () => {
+    try {
+      const permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
+
+      if (permissionResult.granted === false) {
+        alert('Permission to access camera roll is required!');
+        return;
+      }
+
+      const pickerResult = await ImagePicker.launchImageLibraryAsync({
+        base64: true,
+      });
+      uploadAsFile(pickerResult.uri, (resolve, reject) => {
+        if (reject) return console.log(reject);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const uploadAsFile = async (uri, progressCallback) => {
+    try {
+      const response = await fetch(uri);
+      const blob = await response.blob();
+
+      let metadata = {
+        contentType: 'image/jpeg',
+      };
+
+      let name = new Date().getTime() + '-media.jpg';
+      const ref = firebase
+        .storage()
+        .ref()
+        .child('events/' + name);
+
+      const task = ref.put(blob, metadata);
+
+      return new Promise((resolve, reject) => {
+        task.on(
+          'state_changed',
+          (snapshot) => {
+            progressCallback &&
+              progressCallback(snapshot.bytesTransferred / snapshot.totalBytes);
+
+            const _progress =
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            setProgress(_progress);
+          },
+          (error) => reject(error),
+          () => {
+            ref.getDownloadURL().then((uri) => {
+              setImgUrl(uri);
+            });
+          }
+        );
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const requestHandler = () => {
     let validate = false;
 
@@ -86,8 +149,8 @@ export default function AddRequest({ navigation, route }) {
       validate = true;
     }
 
-    if (date < new Date()) {
-      setDateValid(false);
+    if (eventDate < new Date()) {
+      setIsEventDate(false);
       validate = true;
     }
 
@@ -101,50 +164,37 @@ export default function AddRequest({ navigation, route }) {
       validate = true;
     }
 
+    if (!img_url) {
+      setIsImgUrl(false);
+      validate = true;
+    }
+
     if (!latLang) {
       setIsLatLang(false);
       validate = true;
     }
 
     if (!validate) {
-      //   dbAuth
-      //     .collection('events')
-      //     .add({
-      //       bloodType: bloodType,
-      //       quantity: quantity,
-      //       deadline: date.toLocaleDateString(),
-      //       description: description,
-      //       user: {
-      //         _id: userData.id,
-      //         avatar: userData.profile_picture.uri,
-      //         name: userData.name,
-      //       },
-      //     })
-      //     .then(function (docRef) {
-      //       console.log('Document written with ID: ', docRef.id);
-      //     })
-      //     .catch(function (error) {
-      //       console.error('Error adding document: ', error);
-      //     });
       (async () => {
         try {
           const result = await eventsRef.add({
             title,
-            img_url: 'https://picsum.photos/300',
-            eventDate: new Date(date),
+
+            eventDate: new Date(eventDate),
             location: new firebase.firestore.GeoPoint(
               latLang.latitude,
               latLang.longitude
             ),
+            address,
+            img_url,
             description,
             createdDate: new Date(),
           });
-          navigation.goBack();
         } catch (error) {
-          console.log(err);
+          console.log(error);
         }
       })();
-      // navigation.navigate('Tabs');
+      navigation.goBack();
     }
   };
 
@@ -165,29 +215,37 @@ export default function AddRequest({ navigation, route }) {
         <Text style={styles.registerLabel}>Title:</Text>
         <TextInput style={styles.registerInput} onChangeText={setTitle} />
         <Text style={styles.registerAlert}>
-          {!title && !isTitle ? 'Title is Required!' : ''}
+          {!title && !isTitle ? 'Title is required!' : ''}
         </Text>
 
         <Text style={styles.registerLabel}>Event Date:</Text>
         <View style={styles.dateInput}>
           <Text style={styles.dateTxt}>
-            {date.getDate()}/{date.getMonth()}/{date.getFullYear()}
+            {eventDate.getDate()}/{eventDate.getMonth()}/
+            {eventDate.getFullYear()}
           </Text>
           <TouchableOpacity style={styles.dateBtn} onPress={showDatePicker}>
             <Image source={DateImage} style={styles.dateImg} />
           </TouchableOpacity>
         </View>
         <Text style={styles.registerAlert}>
-          {!dateValid ? 'Invalid Date!' : ''}
+          {!isEventDate ? 'Date is invalid!' : ''}
         </Text>
 
         <Text style={styles.registerLabel}>Address:</Text>
         <TextInput style={styles.registerInput} onChangeText={setAddress} />
         <Text style={styles.registerAlert}>
-          {!address && !isAddress ? 'Location is Required!' : ''}
+          {!address && !isAddress ? 'Location is required!' : ''}
         </Text>
 
-        <View style={{ flexDirection: 'row', marginTop: 20 }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            marginTop: 10,
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
           <TouchableOpacity
             style={{
               borderWidth: 1,
@@ -205,15 +263,21 @@ export default function AddRequest({ navigation, route }) {
           >
             <Text style={{ color: 'darkred' }}>Set map location</Text>
           </TouchableOpacity>
+          <Text style={styles.registerAlert}>
+            {!isLatLang ? (
+              'Map location is required!'
+            ) : (
+              <Text style={{ color: 'green' }}>
+                {latLang ? 'Map location is set' : ''}
+              </Text>
+            )}
+          </Text>
         </View>
-        <Text style={styles.registerAlert}>
-          {!latLang && !isLatLang ? 'Map location is Required!' : ''}
-        </Text>
 
         {show && (
           <DateTimePicker
             testID='dateTimePicker'
-            value={date}
+            value={eventDate}
             mode={mode}
             display='default'
             onChange={onChange}
@@ -228,8 +292,42 @@ export default function AddRequest({ navigation, route }) {
           placeholder='Add Description Here'
         />
         <Text style={styles.registerAlert}>
-          {!description && !isDescription ? 'Description is Required!' : ''}
+          {!description && !isDescription ? 'Description is required!' : ''}
         </Text>
+        <Text style={styles.registerLabel}>Event Picture:</Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            marginTop: 10,
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <TouchableOpacity
+            style={{
+              borderWidth: 1,
+              borderRadius: 5,
+              borderColor: 'darkred',
+              padding: 5,
+            }}
+            onPress={openImagePickerAsync}
+          >
+            <Text style={{ color: 'darkred' }}>Set event picture</Text>
+          </TouchableOpacity>
+          <Text style={styles.registerAlert}>
+            {!isImgUrl ? (
+              <Text>'Event picture is required!'</Text>
+            ) : progress > 0 && progress < 100 ? (
+              <Text style={{ color: 'black' }}>{`Uploading ${progress.toFixed(
+                0
+              )}%`}</Text>
+            ) : (
+              <Text style={{ color: 'green' }}>
+                {img_url ? 'Event picture is set' : ''}
+              </Text>
+            )}
+          </Text>
+        </View>
       </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity

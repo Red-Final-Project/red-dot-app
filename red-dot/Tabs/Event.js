@@ -1,10 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, TouchableOpacity, Dimensions } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  Dimensions,
+  FlatList,
+  ScrollView,
+} from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import { styles } from '../pages/styles';
 
 import firebase from 'firebase';
 import { firebaseConfig } from '../firebaseConfig';
+import {} from 'react-native-gesture-handler';
 // const { width: styles.screenWidth } = Dimensions.get('window');
 if (firebase.apps.length === 0) {
   firebase.initializeApp(firebaseConfig);
@@ -14,7 +23,7 @@ if (firebase.apps.length === 0) {
 const db = firebase.firestore();
 const eventsRef = db.collection('events');
 
-export default function Tabs({ navigation }) {
+export default function Tabs({ navigation, route }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [events, setEvents] = useState([]);
 
@@ -22,27 +31,32 @@ export default function Tabs({ navigation }) {
     (async () => {
       const result = await eventsRef.get();
       const mapResult = result.docs.map((doc) => doc.data());
-      setEvents(mapResult);
+      const filteredResult = mapResult.filter((e) => e.title);
+      setEvents(filteredResult);
     })();
   }, []);
+  useEffect(() => {
+    console.log('called');
+  },[]);
 
   //add test
   useEffect(() => {
-    //   (async () => {
-    //     const result = await eventsRef.add({
-    //       title: 'Lorem ipsum dolor',
-    //       img_url: 'https://picsum.photos/300',
-    //       eventDate: new Date('30 september 2020'),
-    //       location: new firebase.firestore.GeoPoint(
-    //         Math.random() * 0.03,
-    //         Math.random() * 0.03
-    //       ),
-    //       description:
-    //         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-    //       createdDate: new Date(),
-    //     });
-    //   })();
+    // (async () => {
+    //   const result = await eventsRef.add({
+    //     title: 'Lorem ipsum dolor',
+    //     img_url: 'https://picsum.photos/300',
+    //     eventDate: new Date('30 september 2020'),
+    //     location: new firebase.firestore.GeoPoint(
+    //       Math.random() * 0.03,
+    //       Math.random() * 0.03
+    //     ),
+    //     description:
+    //       'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+    //     createdDate: new Date(),
+    //   });
+    // })();
   }, []);
+  //   console.log(events, '<<');
   const _renderItem = ({ item, index }) => {
     return (
       <View style={styles.carouselItem}>
@@ -70,6 +84,7 @@ export default function Tabs({ navigation }) {
     );
   };
 
+  if (!events) return <></>;
   return (
     <View style={styles.container}>
       <View style={styles.titlesCont}>

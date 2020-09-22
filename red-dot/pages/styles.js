@@ -154,7 +154,7 @@ export const styles = StyleSheet.create({
     borderBottomColor: '#dcdcdc',
   },
   registerLabel: {
-    marginTop: 20,
+    marginTop: 10,
   },
   registerAlert: {
     fontSize: 10,

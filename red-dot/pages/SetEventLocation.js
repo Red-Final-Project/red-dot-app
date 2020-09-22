@@ -1,25 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, Dimensions } from 'react-native';
 import * as Location from 'expo-location';
-import MapView, { Marker, Polyline } from 'react-native-maps';
+import MapView, { Marker, Polyline, AnimatedRegion } from 'react-native-maps';
 import { styles } from './styles';
 import { Button } from 'react-native-elements';
-import Map from '../assets/images/map.png';
-import { add } from 'react-native-reanimated';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { PROVIDER_GOOGLE } from 'react-native-maps';
 
 export default function Tabs({ navigation, route }) {
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
-
   const { address } = route.params;
   const [search, setSearch] = useState('');
   const [isSset, setIsSet] = useState(false);
-
-  const updateSearch = (search) => {
-    setSearch({ search });
-  };
 
   const getPostion = async (address) => {
     try {
@@ -35,7 +29,6 @@ export default function Tabs({ navigation, route }) {
         }
       );
       const respJson = await resp.json();
-      console.log(respJson);
       const geometry = respJson.results[0].geometry.location;
       setLatitude(geometry.lat);
       setLongitude(geometry.lng);
@@ -46,13 +39,21 @@ export default function Tabs({ navigation, route }) {
 
   useEffect(() => {
     getPostion(address);
+    // setLatitude(5.5951956);
+    // setLongitude(100.6722227);
     setTimeout(() => {
       setIsSet(true);
     }, 5000);
   }, []);
 
+  const handleSearch = () => {
+    getPostion(search);
+    // setLatitude(3.5951956);
+    // setLongitude(98.6722227);
+    setSearch('');
+  };
+
   const handleClick = () => {
-    console.log('loc', { latitude, longitude });
     navigation.navigate('AddEvent', { latLang: { latitude, longitude } });
   };
 
@@ -104,19 +105,19 @@ export default function Tabs({ navigation, route }) {
             width: '100%',
             height: '100%',
           }}
-          initialRegion={{
+          region={{
             latitude,
             longitude,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }}
+          provider={PROVIDER_GOOGLE}
         >
           <Marker
             draggable
             coordinate={{ latitude, longitude }}
             onDragStart={() => setIsSet(false)}
             onDragEnd={(e) => {
-              console.log({ latLang: e.nativeEvent.coordinate });
               setIsSet(true);
             }}
           />
@@ -144,14 +145,15 @@ export default function Tabs({ navigation, route }) {
               backgroundColor: 'white',
               borderRadius: 10,
             }}
+            value={search}
+            onChangeText={setSearch}
           ></TextInput>
-          {/* <TouchableOpacity style={{alignItems:'center'}}> */}
           <Button
             icon={<Icon name='search' size={15} color='white' />}
             type='clear'
             style={{ width: '20%', alignItems: 'center' }}
+            onPress={handleSearch}
           ></Button>
-          {/* </TouchableOpacity> */}
         </View>
 
         {!isSset ? (
