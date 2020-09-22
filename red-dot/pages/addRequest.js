@@ -1,20 +1,46 @@
-import React, {useState} from 'react'
-import {View, Text, Picker, TouchableOpacity, Image} from 'react-native'
+import React, {useState, useEffect} from 'react'
+import {View, Text, Picker, TouchableOpacity, Image, TextInput} from 'react-native'
 import DateTimePicker from '@react-native-community/datetimepicker'
+import AsyncStorage from '@react-native-community/async-storage';
 import {styles} from './styles'
+import 'firebase/firestore';
+import * as firebase from 'firebase';
+import {firebaseConfig} from '../firebaseConfig'
 
+import Tabs from '../Tabs/Home'
 import DateImage from '../assets/images/calendar.png'
-import { TextInput } from 'react-native-gesture-handler'
 
-export default function Tabs({navigation}) {
+if (firebase.apps.length === 0) {
+    firebase.initializeApp(firebaseConfig)
+}
+  
+let dbAuth = firebase.firestore()
+export default function AddRequest({navigation}) {
     const [bloodType, setBloodType] = useState('')
     const [bloodTypeValid, setBloodTypeValid] = useState(true)
+    const [quantity, setQuantity] = useState('')
+    const [quantityValid, setQuantityValid] = useState(true)
     const [date, setDate] = useState(new Date())
     const [dateValid, setDateValid] = useState(true)
     const [mode, setMode] = useState('date')
     const [show, setShow] = useState(false)
     const [description, setDescription] = useState('')
 
+    const [userData, setUserData] = useState({})
+    const getData = async () => {
+        try {
+          const jsonValue = await AsyncStorage.getItem('USER')
+          if(jsonValue) {
+              setUserData(JSON.parse(jsonValue))
+          }
+        } catch(err) {
+          console.log(err)
+        }
+      }
+    useEffect(() => {
+        getData()
+    }, [])
+    console.log(userData)
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || date
         setShow(Platform.OS === 'ios')
@@ -40,9 +66,39 @@ export default function Tabs({navigation}) {
             setDateValid(false)
             validate = true
         }
+        if(!quantity) {
+            setQuantityValid(false)
+            validate = true
+        }
         if(!validate) {
+            dbAuth
+                .collection('posts')
+                .add({
+                    bloodType: bloodType,
+                    quantity: quantity,
+                    deadline: date.toLocaleDateString(),
+                    description: description,
+                    user: {
+                        _id: userData.id,
+                        avatar: userData.profile_picture.uri,
+                        name: userData.name
+                    }
+            })
+            .then(function(docRef) {
+                console.log("Document written with ID: ", docRef.id);
+            })
+            .catch(function(error) {
+                console.error("Error adding document: ", error);
+            });
             navigation.navigate('Tabs')
         } 
+    }
+    if(!userData) {
+        return (
+            <View>
+                <Text>Loading...</Text>
+            </View>
+        )
     }
 
     return (
@@ -69,6 +125,15 @@ export default function Tabs({navigation}) {
                     <Picker.Item label="AB" value="AB"/>
                     <Picker.Item label="O" value="O"/>
                 </Picker>
+                <Text style={styles.registerLabel}>Quantity:</Text>
+                <Text style={styles.registerAlert}>
+                        {!quantityValid ? 'Quantity Required!':''}
+                </Text>
+                <TextInput 
+                    style={styles.registerInput} 
+                    keyboardType={"number-pad"}
+                    onChangeText={setQuantity} 
+                />
                 <Text style={styles.registerLabel}>Deadline:</Text>
                     <Text style={styles.registerAlert}>
                         {!dateValid ? 'Invalid Date!':''}

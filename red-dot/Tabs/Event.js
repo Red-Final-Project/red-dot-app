@@ -27,7 +27,7 @@ export default function Tabs({ navigation }) {
   }, []);
 
   //add test
-    useEffect(() => {
+  useEffect(() => {
     //   (async () => {
     //     const result = await eventsRef.add({
     //       title: 'Lorem ipsum dolor',
@@ -42,7 +42,7 @@ export default function Tabs({ navigation }) {
     //       createdDate: new Date(),
     //     });
     //   })();
-    }, []);
+  }, []);
   const _renderItem = ({ item, index }) => {
     return (
       <View style={styles.carouselItem}>
@@ -74,6 +74,9 @@ export default function Tabs({ navigation }) {
     <View style={styles.container}>
       <View style={styles.titlesCont}>
         <Text style={styles.titles}>Event</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('AddEvent')}>
+          <Text style={styles.addRequest}>Add Event</Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.container}>
         <Carousel
