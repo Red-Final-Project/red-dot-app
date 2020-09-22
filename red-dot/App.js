@@ -14,6 +14,7 @@ import AddEvent from './pages/addEvent'
 import EventLocation from './pages/EventLocation'
 import SetEventLocation from './pages/SetEventLocation'
 import Profile from './pages/Profile'
+import EditProfile from './pages/EditProfile'
 
 import Message from './assets/images/message.png'
 import User from './assets/images/user.png'
@@ -172,26 +173,48 @@ export default function App() {
               }
             })}/>
             <Stack.Screen name="Profile" component={Profile} 
-            options={({navigation}) => ({
-              headerRight: () => (
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('Message')}
-                  style={styles.msgBtn}
-                >
-                  <Image source={Message} style={styles.headerImg} />
-                </TouchableOpacity>
-              ),
-              title: 'red.',
-              headerTitleStyle: {
-                fontFamily: 'Nova-Round',
-                color: 'red',
-                fontSize: 25
-              },
-              headerTintColor: 'black',
-              headerTitleAlign: 'center',
-              headerStyle: {
-                backgroundColor: 'whitesmoke',
-              }
+              options={({navigation}) => ({
+                headerRight: () => (
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('Message')}
+                    style={styles.msgBtn}
+                  >
+                    <Image source={Message} style={styles.headerImg} />
+                  </TouchableOpacity>
+                ),
+                title: 'red.',
+                headerTitleStyle: {
+                  fontFamily: 'Nova-Round',
+                  color: 'red',
+                  fontSize: 25
+                },
+                headerTintColor: 'black',
+                headerTitleAlign: 'center',
+                headerStyle: {
+                  backgroundColor: 'whitesmoke',
+                }
+            })}/>
+            <Stack.Screen name="EditProfile" component={EditProfile} 
+              options={({navigation}) => ({
+                headerRight: () => (
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('Message')}
+                    style={styles.msgBtn}
+                  >
+                    <Image source={Message} style={styles.headerImg} />
+                  </TouchableOpacity>
+                ),
+                title: 'red.',
+                headerTitleStyle: {
+                  fontFamily: 'Nova-Round',
+                  color: 'red',
+                  fontSize: 25
+                },
+                headerTintColor: 'black',
+                headerTitleAlign: 'center',
+                headerStyle: {
+                  backgroundColor: 'whitesmoke',
+                }
             })}/>
       </Stack.Navigator>
     </NavigationContainer>

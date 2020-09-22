@@ -423,4 +423,38 @@ export const styles = StyleSheet.create({
     color: 'whitesmoke',
     textAlign: 'center',
   },
+  profileDescription: {
+    flexDirection: 'column',
+    width: '90%',
+    alignItems: 'center',
+    marginTop: 20,
+    marginHorizontal: '5%',
+    height: 250,
+    backgroundColor: 'whitesmoke',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 7,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 10,
+    elevation: 20,
+    borderRadius: 5,
+  },
+  profil_photo: {
+    marginTop: 10,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+  },
+  logoutBtn: {
+    backgroundColor: 'red',
+    width: 60,
+    borderRadius: 5,
+  },
+  logoutText: {
+    color: 'whitesmoke',
+    textAlign: 'center',
+    alignContent: 'center',
+  },
 });

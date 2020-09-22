@@ -6,6 +6,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import PasswordInput from 'react-native-toggle-password-visibility-expo'
 import { useFonts } from 'expo-font'
 import {styles} from './styles'
+import AsyncStorage from '@react-native-community/async-storage'
 
 import Background from '../assets/images/Background.png'
 import FacebookImage from '../assets/images/facebook.png'
@@ -16,14 +17,21 @@ import * as Facebook from 'expo-facebook'
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 import {firebaseConfig} from '../firebaseConfig'
-import {storeData} from '../AsyncStore'
 
 if (firebase.apps.length === 0) {
   firebase.initializeApp(firebaseConfig)
   }
 
-let dbAuth = firebase.firestore()
+export let dbAuth = firebase.firestore()
 
+  const storeData = async (value) => {
+    try {
+      const jsonValue = JSON.stringify(value)
+      await AsyncStorage.setItem('USER', jsonValue)
+    } catch (err) {
+      console.log(err)
+    }
+  }
 export default function Login({navigation}) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -42,9 +50,9 @@ export default function Login({navigation}) {
           })
           if (result.type === 'success') {
             onSignIn(result)
+            storeData({email: result.user.email})
             navigation.navigate('Tabs')
             return result.accessToken
-
           } else {
             return { cancelled: true };
           }
@@ -55,23 +63,26 @@ export default function Login({navigation}) {
     
     // https://firebase.google.com/docs/auth/web/google-signin
     const onSignIn = (googleUser) => {
-      console.log('Google Auth Response', googleUser);
+      // console.log('Google Auth Response', googleUser);
       // We need to register an Observer on Firebase Auth to make sure auth is initialized.
       const unsubscribe = firebase.auth().onAuthStateChanged(function(firebaseUser) {
         unsubscribe();
         // Check if we are already signed-in Firebase with the correct user.
         if (!isUserEqual(googleUser, firebaseUser)) {
           // Build Firebase credential with the Google ID token.
+          console.log(!isUserEqual(googleUser, firebaseUser))
           const credential = firebase.auth.GoogleAuthProvider.credential(
               googleUser.idToken,
               googleUser.accessToken
-              )
+          )
           // Sign in with credential from the Google user.
           firebase
             .auth()
             .signInWithCredential(credential)
             .then(function (result) {
+              console.log(result.additionalUserInfo, "testing <<<<<<<<<")
               if (result.additionalUserInfo.isNewUser){
+              
               // To realtime database:
               // https://docs.expo.io/guides/using-firebase/#authenticated-data-updates-with-firebase-realtime-database
               // firebase
@@ -91,8 +102,12 @@ export default function Login({navigation}) {
               .doc(result.user.uid)
               .set({
                 email: result.user.email,
-                profile_picture: result.additionalUserInfo.profile.picture,
+                profile_picture: {
+                  uri: result.user.photoUrl
+                },
                 name: result.additionalUserInfo.profile.name,
+                last_donation_date: "_",
+                bloodType: "_",
                 createdAt: Date.now()
               })
               .then(function() {
@@ -137,6 +152,7 @@ export default function Login({navigation}) {
                 const credential = error.credential;
                 // ...
               })
+              // storeData({email: result.user.email})
         } else {
           console.log('User already signed-in Firebase.');
         }
@@ -149,7 +165,7 @@ export default function Login({navigation}) {
         const providerData = firebaseUser.providerData;
         for (let i = 0; i < providerData.length; i++) {
           if (providerData[i].providerId === firebase.auth.GoogleAuthProvider.PROVIDER_ID &&
-              providerData[i].uid === googleUser.getBasicProfile().getId()) {
+              providerData[i].uid === googleUser.user.id) {
             // We don't need to reauth the Firebase connection.
             return true;
           }
@@ -162,15 +178,26 @@ export default function Login({navigation}) {
   // Listen for authentication state to change.
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
+      console.log(user)
       if (user !== null) {
         dbAuth
         .collection("users")
-        .doc(user.uid)
-        .set({
-          email: user.email,
-          profile_picture: user.photoURL,
-          name: user.displayName,
-          createdAt: Date.now()
+        .where('email', "==", user.email)
+        .get()
+        .then(data => {
+          if(!data) {
+            return dbAuth
+            .collection("users")
+            .doc(user.uid)
+            .set({
+            email: user.email,
+            profile_picture: {uri: user.photoURL},
+            last_donation_date: "_",
+            bloodType: "_",
+            name: user.displayName,
+            createdAt: Date.now()
+        })
+          }
         })
         .then(function() {
           console.log("Document successfully written!");
@@ -200,30 +227,32 @@ export default function Login({navigation}) {
        setIsEmpty(true)
        validation = true
     }
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then(() => {
-        dbAuth
-        .collection('users')
-        .where("email", "==", email )
-        .get()
-        .then(function(querySnapshot) {
-          querySnapshot.forEach(function(doc) {
-            storeData({id: doc.id, ...doc.data()})
+    if(!validation) {
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password)
+        .then(() => {
+          dbAuth
+          .collection("users")
+          .where("email", "==", email)
+          .get()
+          .then(querySnapshot => {
+              querySnapshot.forEach(doc => {
+                storeData({email: doc.data().email})
+              })
           })
+        .catch(err => {
+            console.log(err)
         })
-        .catch(error => {
-          console.log(error, 'error find data')
+          navigation.navigate('Tabs')
         })
-        navigation.navigate('Tabs')
-      })
-      .catch(function(error) {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-      // ...
-      })
+        .catch(function(error) {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+        // ...
+        })
+    }
 
   }
   // firebase
