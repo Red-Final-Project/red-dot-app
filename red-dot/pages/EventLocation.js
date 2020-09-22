@@ -4,19 +4,17 @@ import * as Location from 'expo-location';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import { styles } from '../pages/styles';
 
-import Map from '../assets/images/map.png';
 export default function Tabs({ navigation, route }) {
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
-  const [locations, setLocations] = useState(null);
   const [desLatitude, setDesLatitude] = useState(null);
   const [desLongitude, setDesLongitude] = useState(null);
   const [path, setPath] = useState([]);
   const [pathDesc, setPathDesc] = useState({});
-  const [event, setEvent] = useState(null);
+
+  const { event, events } = route.params;
 
   useEffect(() => {
-    setEvent(route.params);
     (async () => {
       let { status } = await Location.requestPermissionsAsync();
       if (status !== 'granted') {
@@ -32,11 +30,7 @@ export default function Tabs({ navigation, route }) {
   }, []);
 
   useEffect(() => {
-    setLocations(locs(latitude, longitude));
-  }, [latitude, longitude]);
-
-  useEffect(() => {
-    // getDirections();
+    getDirections();
   }, [desLatitude, desLongitude]);
 
   const getDirections = async () => {
@@ -93,7 +87,7 @@ export default function Tabs({ navigation, route }) {
           showsCompass
           showsMyLocationButton={true}
           showsUserLocation
-          initialRegion={{
+          region={{
             latitude,
             longitude,
             latitudeDelta: 0.0922,
@@ -102,20 +96,22 @@ export default function Tabs({ navigation, route }) {
         >
           <Marker
             coordinate={{
-                latitude: latitude + 0.03,
-                longitude: longitude + 0.03,
-              }}
+              latitude: event.location.latitude,
+              longitude: event.location.longitude,
+            }}
             title={event.title}
-            // onPress={() =>
-            //   onMarkerPress({
-            //     latitude: latitude + 0.03,
-            //     longitude: longitude + 0.03,
-            //   })
-            // }
+            onPress={() =>
+              onMarkerPress({
+                coords: {
+                  latitude: event.location.latitude,
+                  longitude: event.location.longitude,
+                },
+              })
+            }
             description={`Distance: ${pathDesc.distance} meters, Duration:${(
               pathDesc.duration / 60
             ).toFixed(2)} minutes`}
-          ></Marker>
+          />
 
           {desLatitude && desLongitude && desLatitude && desLongitude && (
             <Polyline
@@ -130,41 +126,3 @@ export default function Tabs({ navigation, route }) {
     );
   }
 }
-
-const locs = (lat, lon) => [
-  {
-    name: 'A',
-    coords: {
-      latitude: lat + Math.random() * 0.03,
-      longitude: lon + Math.random() * 0.03,
-    },
-  },
-  {
-    name: 'B',
-    coords: {
-      latitude: lat + Math.random() * 0.03,
-      longitude: lon + Math.random() * 0.03,
-    },
-  },
-  {
-    name: 'C',
-    coords: {
-      latitude: lat + Math.random() * 0.03,
-      longitude: lon + Math.random() * 0.03,
-    },
-  },
-  {
-    name: 'D',
-    coords: {
-      latitude: lat + Math.random() * 0.03,
-      longitude: lon + Math.random() * 0.03,
-    },
-  },
-  {
-    name: 'E',
-    coords: {
-      latitude: lat + Math.random() * 0.03,
-      longitude: lon + Math.random() * 0.03,
-    },
-  },
-];

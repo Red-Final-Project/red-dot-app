@@ -217,6 +217,7 @@ export default function Login({navigation}) {
   })
 
   const loginHandler = () => {
+    navigation.navigate('Tabs')
     let validation = false
     if(!email) {
        setIsEmpty(true)
