@@ -3,7 +3,7 @@ export const firebaseConfig = {
   authDomain: "expo-chat-7674c.firebaseapp.com",
   databaseURL: "https://expo-chat-7674c.firebaseio.com",
   projectId: "expo-chat-7674c",
-  storageBucket: "expo-chat-7674c.appspot.com",
+  storageBucket: "gs://expo-chat-7674c.appspot.com/",
   messagingSenderId: "393878517160",
   appId: "1:393878517160:web:c66e53ed6cb8be5738999d"
 }
