@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { TouchableOpacity, Image, YellowBox, View } from 'react-native';
 import { AppLoading } from 'expo';
 import { useFonts } from 'expo-font';
+import AsyncStorage from '@react-native-community/async-storage'
 
 import Login from './pages/LoginPage';
 import Register from './pages/Register';
@@ -34,10 +35,24 @@ if (firebase.apps.length === 0) {
 
 YellowBox.ignoreWarnings(['Setting a timer for a long period of time']);
 
+const clearAll = async () => {
+  try {
+    await AsyncStorage.clear()
+  } catch(e) {
+    console.log(e)
+  }
+  console.log('Done.')
+}
+
 const Stack = createStackNavigator();
 export default function App() {
   let [fontsLoaded] = useFonts({
-    'Nova-Round': require('./assets/NovaRound-Regular.ttf'),
+    'Nova-Round': require('./assets/fonts/NovaRound-Regular.ttf'),
+    'Ubuntu-Regular': require('./assets/fonts/Ubuntu-Regular.ttf'),
+    'Ubuntu-Medium': require('./assets/fonts/Ubuntu-Medium.ttf'),
+    'Ubuntu-LightItalic': require('./assets/fonts/Ubuntu-LightItalic.ttf'),
+    'Ubuntu-Bold': require('./assets/fonts/Ubuntu-Bold.ttf'),
+    // 'Ubuntu-Regular': require('./assets/fonts/Ubuntu-')
   });
 
   if (!fontsLoaded) {
@@ -104,7 +119,7 @@ export default function App() {
               <View style={{}}>
                 <Button
                   icon={{
-                    name: 'note',
+                    name: 'user',
                     size: 18,
                     color: COLORS.primary,
                     type: 'simple-line-icon',
@@ -140,7 +155,12 @@ export default function App() {
                 <Image source={Message} style={styles.headerImg} />
               </TouchableOpacity>
             ),
-            title: 'red.',
+            headerTitle: () => (
+              <Image
+                style={{ resizeMode: 'contain', maxHeight: 18 }}
+                source={require('./assets/images/logo.png')}
+              />
+            ),
             headerTitleStyle: {
               fontFamily: 'Nova-Round',
               color: 'red',
@@ -157,7 +177,12 @@ export default function App() {
           name='Chat'
           component={ChatPage}
           options={({ navigation }) => ({
-            title: 'red.',
+            headerTitle: () => (
+              <Image
+                style={{ resizeMode: 'contain', maxHeight: 18 }}
+                source={require('./assets/images/logo.png')}
+              />
+            ),
             headerTitleStyle: {
               fontFamily: 'Nova-Round',
               color: 'red',
@@ -174,7 +199,12 @@ export default function App() {
           name='AddRequest'
           component={AddRequest}
           options={{
-            title: 'red.',
+            headerTitle: () => (
+              <Image
+                style={{ resizeMode: 'contain', maxHeight: 18 }}
+                source={require('./assets/images/logo.png')}
+              />
+            ),
             headerTitleStyle: {
               fontFamily: 'Nova-Round',
               color: 'red',
@@ -191,7 +221,12 @@ export default function App() {
           name='AddEvent'
           component={AddEvent}
           options={{
-            title: 'red.',
+            headerTitle: () => (
+              <Image
+                style={{ resizeMode: 'contain', maxHeight: 18 }}
+                source={require('./assets/images/logo.png')}
+              />
+            ),
             headerTitleStyle: {
               fontFamily: 'Nova-Round',
               color: 'red',
@@ -208,7 +243,12 @@ export default function App() {
           name='SetEventLocation'
           component={SetEventLocation}
           options={{
-            title: 'red.',
+            headerTitle: () => (
+              <Image
+                style={{ resizeMode: 'contain', maxHeight: 18 }}
+                source={require('./assets/images/logo.png')}
+              />
+            ),
             headerTitleStyle: {
               fontFamily: 'Nova-Round',
               color: 'red',
@@ -233,7 +273,12 @@ export default function App() {
                 <Image source={Message} style={styles.headerImg} />
               </TouchableOpacity>
             ),
-            title: 'red.',
+            headerTitle: () => (
+              <Image
+                style={{ resizeMode: 'contain', maxHeight: 18 }}
+                source={require('./assets/images/logo.png')}
+              />
+            ),
             headerTitleStyle: {
               fontFamily: 'Nova-Round',
               color: 'red',
@@ -252,14 +297,32 @@ export default function App() {
           component={Profile}
           options={({ navigation }) => ({
             headerRight: () => (
-              <TouchableOpacity
-                onPress={() => navigation.navigate('Message')}
-                style={styles.msgBtn}
-              >
-                <Image source={Message} style={styles.headerImg} />
-              </TouchableOpacity>
+              <View style={{}}>
+                <Button
+                  icon={{
+                    name: 'login',
+                    size: 18,
+                    color: COLORS.primary,
+                    type: 'simple-line-icon',
+                  }}
+                  onPress={() => {
+                    firebase.auth().signOut().then(function() {
+                      clearAll()
+                      navigation.navigate('Login')
+                    }).catch(function(error) {
+                      console.log(error)
+                    });
+                  }}
+                  buttonStyle={{ backgroundColor: 'transparent' }}
+                />
+              </View>
             ),
-            title: 'red.',
+            headerTitle: () => (
+              <Image
+                style={{ resizeMode: 'contain', maxHeight: 18 }}
+                source={require('./assets/images/logo.png')}
+              />
+            ),
             headerTitleStyle: {
               fontFamily: 'Nova-Round',
               color: 'red',
@@ -284,7 +347,12 @@ export default function App() {
                 <Image source={Message} style={styles.headerImg} />
               </TouchableOpacity>
             ),
-            title: 'red.',
+            headerTitle: () => (
+              <Image
+                style={{ resizeMode: 'contain', maxHeight: 18 }}
+                source={require('./assets/images/logo.png')}
+              />
+            ),
             headerTitleStyle: {
               fontFamily: 'Nova-Round',
               color: 'red',

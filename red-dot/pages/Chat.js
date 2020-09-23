@@ -74,20 +74,25 @@ export default function Chat ({route}){
 
   const handleSend = async (messages) => {
     const sendData = await messages.map(async (message) => {
-      await chatsRef.doc(ChatID()).set({Chatter: [
+      const Chatter = [
         user._id,
         chatee._id
-      ]})
-      return chatsRef.doc(ChatID()).collection("chat").add(message)
+      ]
+      try {
+        await chatsRef.doc(ChatID()).set({Chatter: Chatter})
+        return chatsRef.doc(ChatID()).collection("chat").add(message)
+      } catch (error) {
+        return chatsRef.doc(ChatID()).collection("chat").add(message)
+      }
   })
     await Promise.all(sendData)
   }
 
   return (
       <>
-      <View>
+      <View style={styles.titleChat}>
         <Image source={{uri: chatee.avatar}} style={styles.photoChat}/>
-          <Text style={styles.titleChat}>{chatee.name}</Text>
+        <Text style={styles.titleTextChat}>{chatee.name}</Text>
       </View>
         <GiftedChat messages={messages} 
         user={{_id: user._id, name: user.name, avatar: user.avatar}} 

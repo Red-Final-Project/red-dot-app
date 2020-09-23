@@ -18,7 +18,6 @@ const chatsRef = db.collection('messages')
 
 export default function Messages() {
   const [user, setuser] = useState({})
-  // const [messages, setMessages] = useState([])
   const [ChatIDs, setChatIDs] = useState([])
 
   useEffect(() => {
@@ -49,6 +48,7 @@ export default function Messages() {
     }
     
   }
+  // console.log(ChatIDs)
   const getUser = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('USER')

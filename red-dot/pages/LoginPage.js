@@ -13,7 +13,6 @@ import {
 import { AppLoading } from 'expo';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import PasswordInput from 'react-native-toggle-password-visibility-expo';
-import { useFonts } from 'expo-font';
 import { COLORS, SIZE, SPACE, styles } from './styles';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -255,10 +254,6 @@ export default function Login({ navigation }) {
     });
   }, []);
 
-  let [fontsLoaded] = useFonts({
-    'Nova-Round': require('../assets/NovaRound-Regular.ttf'),
-  });
-
   const loginHandler = () => {
     navigation.navigate('Tabs');
     let validation = false;
@@ -312,9 +307,6 @@ export default function Login({ navigation }) {
   //      navigation.navigate('Tabs')
   //   }
   // }
-  if (!fontsLoaded) {
-    return <AppLoading />;
-  }
 
   // ====
   const loginWithFacebook = async () => {
