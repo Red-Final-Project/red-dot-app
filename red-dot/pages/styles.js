@@ -90,8 +90,6 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     marginTop: 10,
-    marginLeft: 20,
-    marginRight: 20,
   },
   titlesCont: {
     flexDirection: 'row',
@@ -106,6 +104,7 @@ export const styles = StyleSheet.create({
   },
   titles: {
     fontSize: 20,
+    fontFamily: 'Ubuntu-Medium',
     color: '#708090',
   },
   backgroundImage: {
@@ -158,7 +157,7 @@ export const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     paddingVertical: SPACE(2),
     paddingHorizontal: SPACE(4),
-    borderRadius: SPACE(10),
+    // borderRadius: SPACE(10),
     width: screenWidth / 1.5,
     marginVertical: SPACE(1),
     marginHorizontal: SPACE(1),
@@ -238,15 +237,15 @@ export const styles = StyleSheet.create({
   //REGISTER
 
   dateBtn: {
-    position: 'absolute',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     width: '100%',
   },
   dateImg: {
-    marginTop: 10,
     width: 20,
     marginBottom: 8,
     height: 20,
-    left:300
   },
 
 
@@ -330,10 +329,11 @@ export const styles = StyleSheet.create({
   //   color: 'rgba(241,52,52,0.8)',
   //   fontStyle: 'italic',
   // },
-  // registerInput: {
-  //   width: '100%',
-  //   borderBottomWidth: 1,
-  // },
+  registerInput: {
+    width: '100%',
+    borderBottomWidth: 1,
+    fontFamily: 'Ubuntu-Regular'
+  },
   // dateInput: {
   //   marginTop: 10,
   //   flexDirection: 'row',
@@ -342,7 +342,7 @@ export const styles = StyleSheet.create({
   //   borderBottomWidth: 1,
   // },
   // dateTxt: {
-  //   marginBottom: 4,
+  //   marginBottom: 0,
   // },
   // dateBtn: {
   //   position: 'absolute',
@@ -378,29 +378,71 @@ export const styles = StyleSheet.create({
   addRequest: {
     color: 'blue',
   },
-  statusBox: {
-    backgroundColor: 'whitesmoke',
-    width: '90%',
+  statusBox1: {
+    backgroundColor: 'white',
+    width: '96%',
     minHeight: 100,
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 7,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 10,
-    elevation: 20,
+    // borderRadius: 10,
+    // shadowColor: '#000',
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 7,
+    // },
+    // shadowOpacity: 0.5,
+    // shadowRadius: 10,
+    // elevation: 20,
     flexDirection: 'row',
-    marginBottom: 10,
+    // borderBottomColor: 'rgba(0,0,0,0.2)',
+    // borderBottomWidth: 1,
+    // marginBottom: 5,
+  },
+  statusBox2: {
+    backgroundColor: "white",
+    width: '96%',
+    minHeight: 100,
+    flexDirection: 'row',
   },
   profilePictureFluid: {
     flexDirection: 'column',
     alignItems: 'center',
     width: '25%',
   },
+  dotBox: {
+    // backgroundColor: "black",
+    width: '100%',
+    // minHeight: 50
+  },
+  photoBot: {
+    marginTop: SPACE(2),
+    flexDirection: 'column',
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: COLORS.primary,
+    width: "70%",
+    borderRadius: 50,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 7,
+    },
+    shadowOpacity: 0.9,
+    shadowRadius: 10,
+    elevation: 40,
+  },
+  borderDot: {
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: 'flex-start',
+    marginTop: SPACE(2.5),
+    width: "50%",
+    minHeight: "100%",
+    borderStyle: "dashed",
+    borderRightColor: 'rgba(0,0,0,0.08)',
+    borderRightWidth: 1,
+    borderRadius: 1,
+  },
   statusImage: {
-    marginTop: 10,
+    marginVertical: 5,
     width: 50,
     height: 50,
     borderRadius: 50,
@@ -415,23 +457,27 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    borderBottomColor: 'rgba(0,0,0,0.2)',
-    borderBottomWidth: 1,
+    // borderBottomColor: 'rgba(0,0,0,0.2)',
+    // borderBottomWidth: 1,
     marginBottom: 5,
   },
   statusName: {
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
+    fontFamily: "Ubuntu-Bold"
   },
   deadlineStatus: {
     fontSize: 10,
-    fontStyle: 'italic',
+    fontFamily: 'Ubuntu-LightItalic',
   },
   requestStatus: {
-    fontSize: 10,
+    fontSize: 12,
+    fontFamily: 'Ubuntu-Regular'
   },
   statusDescription: {
-    fontSize: 10,
-    fontStyle: 'italic',
+    marginTop: SPACE(2),
+    fontSize: 14,
+    fontFamily: 'Ubuntu-Regular',
+    // fontStyle: 'italic',
   },
   btnPosition: {
     flexDirection: 'row',
@@ -439,10 +485,19 @@ export const styles = StyleSheet.create({
     marginBottom: 10,
   },
   btnStatus: {
-    backgroundColor: 'red',
+    marginTop: SPACE(5),
+    backgroundColor: COLORS.primary,
     width: 50,
     padding: 3,
-    borderRadius: 5,
+    borderRadius: 50,
+    shadowColor: "#000",
+    shadowOffset: {
+        width: 3,
+        height: 2
+    },
+    shadowOpacity: 0.9,
+    shadowRadius: 50,
+    elevation: 6,
   },
   contactReqBtn: {
     textAlign: 'center',
@@ -501,40 +556,6 @@ export const styles = StyleSheet.create({
     width: '100%',
   },
 
-    profileDescription: {
-        flexDirection: "column",
-        width: "90%",
-        alignItems: "center",
-        marginTop: 20,
-        marginHorizontal: "5%",
-        height: 250,
-        backgroundColor: "whitesmoke",
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 7
-        },
-        shadowOpacity: 0.5,
-        shadowRadius: 10,
-        elevation: 20,
-        borderRadius: 5
-    },
-    profil_photo: {
-        marginTop: 10,
-        width: 100,
-        height: 100,
-        borderRadius: 50,
-    },
-    logoutBtn: {
-        backgroundColor: "red",
-        width: 60,
-        borderRadius: 5
-    },
-    logoutText: {
-        color: "whitesmoke",
-        textAlign: "center",
-        alignContent: "center"
-    },
     titleChat: {
         flexDirection: "row",
         paddingLeft: 10,
@@ -548,8 +569,12 @@ export const styles = StyleSheet.create({
     photoChat: {
         width: 50,
         height: 50,
-        marginRight: 20,
+        marginRight: 16,
         borderRadius: 50
+    },
+    titleTextChat: {
+      fontFamily: "Ubuntu-Medium",
+      fontSize: 18
     },
 
   eventPoster: {
@@ -618,16 +643,10 @@ export const styles = StyleSheet.create({
     paddingRight: 10,
     width: '95%',
     height: 50,
-    backgroundColor: 'whitesmoke',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 7,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 10,
-    elevation: 20,
-    borderRadius: 5,
+    borderRadius: 10,
+    backgroundColor: '#fdfdfd',
+    borderLeftColor: COLORS.secondary,
+    borderLeftWidth: 10,
   },
   row: {
     flexDirection: 'row',
@@ -635,6 +654,7 @@ export const styles = StyleSheet.create({
   },
   available: {
     color: 'green',
+    fontFamily: 'Ubuntu-Regular'
   },
   requestSearchBtn: {
     backgroundColor: 'red',
@@ -647,12 +667,12 @@ export const styles = StyleSheet.create({
   },
   profileDescription: {
     flexDirection: 'column',
-    width: '90%',
+    width: '100%',
     alignItems: 'center',
-    marginTop: 20,
-    marginHorizontal: '5%',
-    height: 250,
-    backgroundColor: 'whitesmoke',
+    height: 500,
+    borderBottomEndRadius: 50,
+    // borderBottomStartRadius: 50,
+    backgroundColor: COLORS.primary,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -663,20 +683,58 @@ export const styles = StyleSheet.create({
     elevation: 20,
     borderRadius: 5,
   },
+  profilBot: {
+    marginVertical: 40,
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 100,
+    width: 180,
+    height: 180,
+    backgroundColor: "white"
+  },
   profil_photo: {
+    width: 150,
+    height: 150,
+    borderRadius: 100,
+  },
+  profil_name: {
+    fontFamily: "Ubuntu-Medium",
+    color: "white",
+    fontSize: 20,
+  },
+  profil_text: {
+    fontFamily: "Ubuntu-Medium",
+    color: "white",
+    fontSize: 16,
     marginTop: 10,
-    width: 100,
-    height: 100,
+  },
+  editBtnContainer: {
+    // marginTop: SPACE(10),
+    borderBottomStartRadius: 50,
+    backgroundColor: "white",
+    flexDirection: "row",
+    width: "100%",
+    justifyContent: "flex-end",
+    paddingRight: SPACE(1)
+  },
+  editBtn: {
+    backgroundColor: "white",
+    width: 150,
+    paddingVertical: 15,
     borderRadius: 50,
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    alignItems: "center"
   },
-  logoutBtn: {
-    backgroundColor: 'red',
-    width: 60,
-    borderRadius: 5,
+  editBtnTxt: {
+    color: COLORS.primary,
+    fontFamily: "Ubuntu-Regular",
+    textAlign: "center"
   },
-  logoutText: {
-    color: 'whitesmoke',
-    textAlign: 'center',
-    alignContent: 'center',
-  },
+  settingIcon: {
+    marginHorizontal: SPACE(2),
+    width: 25,
+    height: 25
+  }
 })

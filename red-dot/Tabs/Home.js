@@ -14,7 +14,6 @@ if (firebase.apps.length === 0) {
 const dbAuth = firebase.firestore()
 export default function Tabs({navigation, route}) {
     // console.log(route);
-    navigation.setOptions({ title: 'haha' });
     const [user, setUser] = useState({})
     const [posts, setPosts] = useState([])
     const getPosts = () => {
@@ -49,20 +48,10 @@ export default function Tabs({navigation, route}) {
     }
     return (
         <SafeAreaView>
-            {/* <View style={styles.titlesCont}>
-                <Text style={styles.titles}>My Time Line</Text>
-                <TouchableOpacity onPress={() => navigation.navigate('AddRequest')}>
-                    <Text style={styles.addRequest}>
-                        Add Request
-                    </Text>
-                </TouchableOpacity>
-            </View> */}
-            <ScrollView 
-                style={{marginBottom: 40}}
-            >
+            <ScrollView>
                 <View style={styles.fluid}>
                     {posts.map((post, idx) => (
-                        <Posts key={idx} post={post} />
+                        <Posts key={idx} index={idx} post={post} />
                     ))}
                 </View>
             </ScrollView>

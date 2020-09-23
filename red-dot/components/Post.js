@@ -3,15 +3,21 @@ import {View, Text, Image, TouchableOpacity} from 'react-native'
 import {useNavigation} from '@react-navigation/native'
 
 import {styles} from '../pages/styles'
-export default function Post({post}) {
+
+export default function Post({post, index}) {
     const navigation = useNavigation()
-    
+
     return (
-        <View style={styles.statusBox}>
+        <View style={index % 2 === 0 ? styles.statusBox1 : styles.statusBox2}>
             <View style={styles.profilePictureFluid}>
-                <Image source={{uri: post.user.avatar}} 
-                    style={styles.statusImage}
-                />
+                    <View style={styles.photoBot}>
+                        <Image source={{uri: post.user.avatar}} 
+                            style={styles.statusImage}
+                        />
+                    </View>
+                    <View style={styles.dotBox}>
+                        <View style={styles.borderDot}></View>
+                    </View>
             </View>
             <View style={styles.statusContent}>
                 <View style={styles.statusTitle}>

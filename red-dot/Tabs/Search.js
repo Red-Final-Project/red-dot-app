@@ -51,12 +51,12 @@ export default function Tabs({navigation, route}) {
         )
     } else {
     return (
-        <SafeAreaView>
+        <SafeAreaView style={{backgroundColor: 'white', minHeight: "100%"}}>
             <View style={styles.titlesCont}>
                 <Text style={styles.titles}>Search Donor</Text>
             </View>
             <View style={styles.searchForm}>
-                <Text>Select Blood Type:</Text>
+                <Text style={{fontFamily: 'Ubuntu-Regular'}}>Select Blood Type:</Text>
                 <Picker 
                     style={styles.registerInput}
                     label="-- Choose Type --"
