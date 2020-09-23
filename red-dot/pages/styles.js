@@ -451,5 +451,21 @@ export const styles = StyleSheet.create({
         color: "whitesmoke",
         textAlign: "center",
         alignContent: "center"
+    },
+    titleChat: {
+        flexDirection: "row",
+        paddingLeft: 10,
+        paddingRight: 10,
+        borderBottomWidth: 1,
+        borderColor: 'rgba(0,0,0,0.2)',
+        alignItems: "center",
+        paddingBottom: 5,
+        paddingTop: 5,
+    },
+    photoChat: {
+        width: 50,
+        height: 50,
+        marginRight: 20,
+        borderRadius: 50
     }
 })

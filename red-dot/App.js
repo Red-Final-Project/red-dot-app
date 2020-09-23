@@ -13,6 +13,7 @@ import AddRequest from './pages/addRequest'
 import EventLocation from './pages/EventLocation'
 import Profile from './pages/Profile'
 import EditProfile from './pages/EditProfile'
+import ChatPage from './pages/Chat'
 
 import Message from './assets/images/message.png'
 import User from './assets/images/user.png'
@@ -84,7 +85,7 @@ export default function App() {
               backgroundColor: 'whitesmoke',
             }
           })}/>
-          <Stack.Screen name="Message" component={MessagePage} 
+          {/* <Stack.Screen name="Message" component={MessagePage} 
             options={({navigation}) => ({
               headerRight: () => (
                 <TouchableOpacity
@@ -94,6 +95,20 @@ export default function App() {
                   <Image source={Message} style={styles.headerImg} />
                 </TouchableOpacity>
               ),
+              title: 'red.',
+              headerTitleStyle: {
+                fontFamily: 'Nova-Round',
+                color: 'red',
+                fontSize: 25
+              },
+              headerTintColor: 'black',
+              headerTitleAlign: 'center',
+              headerStyle: {
+                backgroundColor: 'whitesmoke',
+              }
+            })}/> */}
+            <Stack.Screen name="Chat" component={ChatPage} 
+            options={({navigation}) => ({
               title: 'red.',
               headerTitleStyle: {
                 fontFamily: 'Nova-Round',

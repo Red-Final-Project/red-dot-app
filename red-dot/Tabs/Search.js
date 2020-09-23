@@ -8,8 +8,8 @@ import SeachCard from '../components/seacrhBy'
 export default function Tabs({navigation}) {
     const [searchValue, setSearchValue] = useState(null)
     const [bloodType, setBloodType] = useState('')
+    
     const searchHandler = (value) => {
-        console.log(value, "valueeee?>>>>>")
         setBloodType(value)
         let result = [];
         dbAuth
@@ -20,9 +20,7 @@ export default function Tabs({navigation}) {
             querySnapshot.forEach(doc => {
                 result.push(doc.data())
             })
-            // console.log(result)
             let filtered = result.filter(card => card.bloodType === value)
-            // if(!fileted.length) return setSearchValue(null)
             setSearchValue(filtered)
         })
         .catch(err => {

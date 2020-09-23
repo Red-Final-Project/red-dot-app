@@ -32,11 +32,13 @@ export default function Tabs() {
           .filter(({ type }) => type === 'added')
           .map(({ doc }) => {
               const message = doc.data()
+              console.log({...message}, "ini chat grup >>>>>>>>>>>")
               //createdAt is firebase.firestore.Timestamp instance
               //https://firebase.google.com/docs/reference/js/firebase.firestore.Timestamp
               return { ...message, createdAt: message.createdAt.toDate() }
           })
           .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+          // console.log(querySnapshot)
       appendMessages(messagesOnFirestore)
     })
     return () => unsubscribe()
