@@ -10,7 +10,9 @@ import Register from './pages/Register'
 import Tabs from './pages/Tabs'
 import MessagePage from './pages/Message'
 import AddRequest from './pages/addRequest'
+import AddEvent from './pages/addEvent'
 import EventLocation from './pages/EventLocation'
+import SetEventLocation from './pages/SetEventLocation'
 import Profile from './pages/Profile'
 import EditProfile from './pages/EditProfile'
 import ChatPage from './pages/Chat'
@@ -122,6 +124,34 @@ export default function App() {
               }
             })}/>
           <Stack.Screen name="AddRequest" component={AddRequest} 
+            options={{
+              title: 'red.',
+              headerTitleStyle: {
+                fontFamily: 'Nova-Round',
+                color: 'red',
+                fontSize: 25
+              },
+              headerTintColor: 'black',
+              headerTitleAlign: 'center',
+              headerStyle: {
+                backgroundColor: 'whitesmoke',
+              }
+          }}/>
+          <Stack.Screen name="AddEvent" component={AddEvent} 
+            options={{
+              title: 'red.',
+              headerTitleStyle: {
+                fontFamily: 'Nova-Round',
+                color: 'red',
+                fontSize: 25
+              },
+              headerTintColor: 'black',
+              headerTitleAlign: 'center',
+              headerStyle: {
+                backgroundColor: 'whitesmoke',
+              }
+          }}/>
+          <Stack.Screen name="SetEventLocation" component={SetEventLocation} 
             options={{
               title: 'red.',
               headerTitleStyle: {
