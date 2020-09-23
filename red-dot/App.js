@@ -85,7 +85,7 @@ export default function App() {
               backgroundColor: 'whitesmoke',
             }
           })}/>
-          {/* <Stack.Screen name="Message" component={MessagePage} 
+          <Stack.Screen name="Message" component={MessagePage} 
             options={({navigation}) => ({
               headerRight: () => (
                 <TouchableOpacity
@@ -106,7 +106,7 @@ export default function App() {
               headerStyle: {
                 backgroundColor: 'whitesmoke',
               }
-            })}/> */}
+            })}/>
             <Stack.Screen name="Chat" component={ChatPage} 
             options={({navigation}) => ({
               title: 'red.',

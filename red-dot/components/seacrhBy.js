@@ -1,14 +1,13 @@
 import React from 'react'
 import {View, Text, Image, TouchableOpacity} from 'react-native'
+import {useNavigation} from '@react-navigation/native'
 
 import {styles} from '../pages/styles'
 export default function SeacrchCard({card}) {
-    // console.log(card, "from Card")
+    const navigation = useNavigation()
     const countThreeMonth = () => {
         let lastDonor = new Date(card.last_donation_date)
-        // console.log(lastDonor.toLocaleDateString())
         lastDonor.setMonth(lastDonor.getMonth() + 3)
-        // return lastDonor.toLocaleDateString()
         if(lastDonor < new Date() === false) return 'Unavailable'
         else return "Available"
     }
@@ -20,7 +19,13 @@ export default function SeacrchCard({card}) {
             </View>
             <View style={styles.row}>
                 <Text>Last Donor Date:  {card.last_donation_date}</Text>
-                <TouchableOpacity style={styles.requestSearchBtn}>
+                <TouchableOpacity style={styles.requestSearchBtn} onPress={() => navigation.navigate('Chat', {
+                    chatee: {
+                        _id: card._id,
+                        avatar: card.profile_picture.uri,
+                        name: card.name
+                    }
+                })}>
                     <Text style={styles.requestSearchTextBtn}>Request</Text>
                 </TouchableOpacity>
             </View>

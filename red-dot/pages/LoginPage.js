@@ -50,7 +50,15 @@ export default function Login({navigation}) {
           })
           if (result.type === 'success') {
             onSignIn(result)
-            storeData({email: result.user.email})
+              dbAuth
+              .collection("users")
+              .where("email", "==", result.user.email)
+              .get()
+              .then(querySnapshot => {
+              querySnapshot.forEach(doc => {
+                storeData({email: doc.data().email, _id: doc.id})
+              })
+              })
             navigation.navigate('Tabs')
             return result.accessToken
           } else {
@@ -238,7 +246,7 @@ export default function Login({navigation}) {
           .get()
           .then(querySnapshot => {
               querySnapshot.forEach(doc => {
-                storeData({email: doc.data().email})
+                storeData({email: doc.data().email, _id: doc.id})
               })
           })
         .catch(err => {

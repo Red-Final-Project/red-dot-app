@@ -14,11 +14,10 @@ export default function Tabs({navigation}) {
         let result = [];
         dbAuth
         .collection('users')
-        // .where("bloodType", "==", value)
         .get()
         .then(querySnapshot => {
             querySnapshot.forEach(doc => {
-                result.push(doc.data())
+                result.push({_id: doc.id, ...doc.data()})
             })
             let filtered = result.filter(card => card.bloodType === value)
             setSearchValue(filtered)
@@ -27,13 +26,6 @@ export default function Tabs({navigation}) {
             console.log(err)
         })
     }
-    // useEffect(() => {
-    //     searchHandler()
-    //     const unsubscribe = navigation.addListener('focus', () => {
-    //         searchHandler()
-    //     })
-    //     return unsubscribe 
-    // }, [searchValue])
     if(!searchValue) {
        return (
         <>

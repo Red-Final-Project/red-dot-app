@@ -25,7 +25,7 @@ export default function Post({post}) {
                     <TouchableOpacity style={styles.btnStatus} 
                         onPress={()=>
                             navigation.navigate('Chat', {chatee:{
-                                _id: post.user._id,
+                                _id: post.user.id,
                                 name: post.user.name,
                                 avatar: post.user.avatar
                             }})

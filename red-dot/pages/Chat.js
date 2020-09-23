@@ -42,7 +42,6 @@ export default function Chat ({route}){
           .filter(({ type }) => type === 'added')
           .map(({ doc }) => {
               const message = doc.data()
-              console.log(message)
               return { ...message, createdAt: message.createdAt.toDate() }
           })
           .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
@@ -74,14 +73,20 @@ export default function Chat ({route}){
   )
 
   const handleSend = async (messages) => {
-    const sendData = messages.map((message) => chatsRef.doc(ChatID()).collection("chat").add(message))
+    const sendData = await messages.map(async (message) => {
+      await chatsRef.doc(ChatID()).set({Chatter: [
+        user._id,
+        chatee._id
+      ]})
+      return chatsRef.doc(ChatID()).collection("chat").add(message)
+  })
     await Promise.all(sendData)
   }
 
   return (
       <>
       <View>
-        <Image source={chatee.avatar} style={styles.photoChat}/>
+        <Image source={{uri: chatee.avatar}} style={styles.photoChat}/>
           <Text style={styles.titleChat}>{chatee.name}</Text>
       </View>
         <GiftedChat messages={messages} 
