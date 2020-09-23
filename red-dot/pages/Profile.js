@@ -29,7 +29,6 @@ export default function Profile({navigation}) {
         try {
           const jsonValue = await AsyncStorage.getItem('USER')
           setUserEmail(JSON.parse(jsonValue))
-        //   return jsonValue != null ? JSON.parse(jsonValue) : null;
         } catch(err) {
           console.log(err)
         }

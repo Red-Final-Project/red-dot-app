@@ -1,10 +1,11 @@
 // @refresh reset
 
 import React, { useEffect, useState, useCallback} from 'react'
-import { YellowBox, StyleSheet, View } from 'react-native'
+import { YellowBox, StyleSheet, View, Text, Image } from 'react-native'
 import { GiftedChat } from 'react-native-gifted-chat'
 import firebase from 'firebase'
 import { firebaseConfig } from '../firebaseConfig'
+import {styles} from './styles'
 
 if (firebase.apps.length === 0) {
   firebase.initializeApp(firebaseConfig)
@@ -13,39 +14,46 @@ if (firebase.apps.length === 0) {
 YellowBox.ignoreWarnings(['Setting a timer for a long period of time'])
 
 const db = firebase.firestore()
-const chatsRef = db.collection('chats')
+const chatsRef = db.collection('messages')
 
-export default function Chat (){
+export default function Chat ({route}){
   const [ user, setuser] = useState([])
   const [messages, setMessages] = useState([])
-
-  console.log(user,"<<<< ini user hasil read firebase Auth ")
+  const {chatee} = route.params
+  
   useEffect(() => {
     isLoggedIn()
   }, [])
+  
+  const ChatID = () => {
+    const chatterID = user._id;
+    const chateeID = chatee._id;
+    const chatIDpre = [];
+    chatIDpre.push(chatterID);
+    chatIDpre.push(chateeID);
+    chatIDpre.sort();
+    return chatIDpre.join('_');
+  }
 
   useEffect(() => {
-    // https://firebase.google.com/docs/firestore/query-data/listen
-    const unsubscribe = chatsRef.onSnapshot((querySnapshot) => {
+    const unsubscribe = chatsRef.doc(ChatID()).collection('chat').onSnapshot(querySnapshot => {
       const messagesOnFirestore = querySnapshot
           .docChanges()
           .filter(({ type }) => type === 'added')
           .map(({ doc }) => {
               const message = doc.data()
-              //createdAt is firebase.firestore.Timestamp instance
-              //https://firebase.google.com/docs/reference/js/firebase.firestore.Timestamp
               return { ...message, createdAt: message.createdAt.toDate() }
           })
           .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
-      appendMessages(messagesOnFirestore)
+          appendMessages(messagesOnFirestore)
     })
+    
     return () => unsubscribe()
-  }, [])
-
+  }, [user])
+  
   const isLoggedIn = () => {
     firebase.auth().onAuthStateChanged((user) => {
       if(user) {
-        // console.log(user, "<<<< user from firebase")
         setuser({
           _id: user.uid,
           name: user.displayName,
@@ -65,30 +73,27 @@ export default function Chat (){
   )
 
   const handleSend = async (messages) => {
-    const sendData = messages.map((message) => chatsRef.add(message))
+    const sendData = await messages.map(async (message) => {
+      await chatsRef.doc(ChatID()).set({Chatter: [
+        user._id,
+        chatee._id
+      ]})
+      return chatsRef.doc(ChatID()).collection("chat").add(message)
+  })
     await Promise.all(sendData)
-}  
+  }
 
   return (
-    <GiftedChat messages={messages} user={{_id: user._id, name: user.name, avatar: user.avatar}} onSend={handleSend} />
+      <>
+      <View>
+        <Image source={{uri: chatee.avatar}} style={styles.photoChat}/>
+          <Text style={styles.titleChat}>{chatee.name}</Text>
+      </View>
+        <GiftedChat messages={messages} 
+        user={{_id: user._id, name: user.name, avatar: user.avatar}} 
+        onSend={handleSend} 
+        />
+      </>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: 30,
-  },
-  input: {
-      height: 50,
-      width: '100%',
-      borderWidth: 1,
-      padding: 15,
-      marginBottom: 20,
-      borderColor: 'gray',
-  },
-})
 

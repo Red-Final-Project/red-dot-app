@@ -1,8 +1,11 @@
 import React from 'react'
 import {View, Text, Image, TouchableOpacity} from 'react-native'
+import {useNavigation} from '@react-navigation/native'
 
 import {styles} from '../pages/styles'
 export default function Post({post}) {
+    const navigation = useNavigation()
+    
     return (
         <View style={styles.statusBox}>
             <View style={styles.profilePictureFluid}>
@@ -19,7 +22,14 @@ export default function Post({post}) {
                 <Text style={styles.requestStatus}>Quantity: {post.quantity} Bags</Text>
                 <Text style={styles.statusDescription}>"{post.description}"</Text>
                 <View style={styles.btnPosition}>
-                    <TouchableOpacity style={styles.btnStatus}>
+                    <TouchableOpacity style={styles.btnStatus} 
+                        onPress={()=>
+                            navigation.navigate('Chat', {chatee:{
+                                _id: post.user.id,
+                                name: post.user.name,
+                                avatar: post.user.avatar
+                            }})
+                        }>
                         <Text style={styles.contactReqBtn}>Contact</Text>
                     </TouchableOpacity>
                 </View>

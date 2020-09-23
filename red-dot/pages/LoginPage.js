@@ -67,24 +67,32 @@ export default function Login({ navigation }) {
 
   // console.log(email, password, '<<<< check input data');
 
-  // ======== LOGIN INTEGRATION
-  // https://docs.expo.io/versions/latest/sdk/google/
-  const signInWithGoogleAsync = async () => {
-    try {
-      const result = await Google.logInAsync({
-        androidClientId:
-          '393878517160-f2ul3ve3qs5e0g8vreqgn751sg4qpa8o.apps.googleusercontent.com',
-        iosClientId:
-          '393878517160-b8oil4rd2a990far6bjkbg2albc9aoe9.apps.googleusercontent.com',
-        scopes: ['profile', 'email'],
-      });
-      if (result.type === 'success') {
-        onSignIn(result);
-        storeData({ email: result.user.email });
-        navigation.navigate('Tabs');
-        return result.accessToken;
-      } else {
-        return { cancelled: true };
+
+    // ======== LOGIN INTEGRATION
+      // https://docs.expo.io/versions/latest/sdk/google/
+      const signInWithGoogleAsync= async () => {
+        try {
+          const result = await Google.logInAsync({
+            androidClientId: '393878517160-f2ul3ve3qs5e0g8vreqgn751sg4qpa8o.apps.googleusercontent.com',
+            iosClientId: '393878517160-b8oil4rd2a990far6bjkbg2albc9aoe9.apps.googleusercontent.com',
+            scopes: ['profile', 'email'],
+          })
+          if (result.type === 'success') {
+            onSignIn(result)
+              dbAuth
+              .collection("users")
+              .where("email", "==", result.user.email)
+              .get()
+              .then(querySnapshot => {
+              querySnapshot.forEach(doc => {
+                storeData({email: doc.data().email, _id: doc.id})
+              })
+              })
+            navigation.navigate('Tabs')
+            return result.accessToken
+          } else {
+            return { cancelled: true };
+        
       }
     } catch (e) {
       return { error: true };
@@ -112,11 +120,12 @@ export default function Login({ navigation }) {
             .auth()
             .signInWithCredential(credential)
             .then(function (result) {
-              console.log(result.additionalUserInfo, 'testing <<<<<<<<<');
-              if (result.additionalUserInfo.isNewUser) {
-                // To realtime database:
-                // https://docs.expo.io/guides/using-firebase/#authenticated-data-updates-with-firebase-realtime-database
-                // firebase
+              // console.log(result.additionalUserInfo, "testing <<<<<<<<<")
+              if (result.additionalUserInfo.isNewUser){
+              
+              // To realtime database:
+              // https://docs.expo.io/guides/using-firebase/#authenticated-data-updates-with-firebase-realtime-database
+              // firebase
                 // .database()
                 // .ref('/users/' + result.user.uid)
                 // .set({
@@ -212,33 +221,34 @@ export default function Login({ navigation }) {
   // Listen for authentication state to change.
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
-      console.log(user);
+      // console.log(user)
       if (user !== null) {
         dbAuth
-          .collection('users')
-          .where('email', '==', user.email)
-          .get()
-          .then((data) => {
-            if (!data) {
-              return dbAuth
-                .collection('users')
-                .doc(user.uid)
-                .set({
-                  email: user.email,
-                  profile_picture: { uri: user.photoURL },
-                  last_donation_date: '_',
-                  bloodType: '_',
-                  name: user.displayName,
-                  createdAt: Date.now(),
-                });
-            }
-          })
-          .then(function () {
-            console.log('Document successfully written!');
-          })
-          .catch(function (error) {
-            console.error('Error writing document: ', error);
-          });
+        .collection("users")
+        .where('email', "==", user.email)
+        .get()
+        .then(data => {
+          // console.log(data, "dari dataaaa>>>>>>")
+          if(!data) {
+            return dbAuth
+            .collection("users")
+            .doc(user.uid)
+            .set({
+            email: user.email,
+            profile_picture: {uri: user.photoURL},
+            last_donation_date: "_",
+            bloodType: "_",
+            name: user.displayName,
+            createdAt: Date.now()
+        })
+          }
+        })
+        .then(function() {
+          console.log("Document successfully written!");
+        })
+        .catch(function(error) {
+          console.error("Error writing document: ", error);
+        })
       } else {
         console.log('No user found in Facebook');
       }
@@ -266,18 +276,18 @@ export default function Login({ navigation }) {
         .signInWithEmailAndPassword(email, password)
         .then(() => {
           dbAuth
-            .collection('users')
-            .where('email', '==', email)
-            .get()
-            .then((querySnapshot) => {
-              querySnapshot.forEach((doc) => {
-                storeData({ email: doc.data().email });
-              });
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-          navigation.navigate('Tabs');
+          .collection("users")
+          .where("email", "==", email)
+          .get()
+          .then(querySnapshot => {
+              querySnapshot.forEach(doc => {
+                storeData({email: doc.data().email, _id: doc.id})
+              })
+          })
+        .catch(err => {
+            console.log(err)
+        })
+          navigation.navigate('Tabs')
         })
         .catch(function (error) {
           // Handle Errors here.

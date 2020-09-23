@@ -13,10 +13,11 @@ if (firebase.apps.length === 0) {
   
 const dbAuth = firebase.firestore()
 export default function Tabs({navigation}) {
+    const [user, setUser] = useState({})
     const [posts, setPosts] = useState([])
     const getPosts = () => {
         dbAuth.collection('posts')
-        .orderBy("deadline", "desc")
+        .orderBy("deadline", "asc")
         .get()
         .then(function(querySnapshot) {
             const data = []

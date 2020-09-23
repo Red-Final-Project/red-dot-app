@@ -16,6 +16,8 @@ import SetEventLocation from './pages/SetEventLocation';
 import Profile from './pages/Profile';
 import EditProfile from './pages/EditProfile';
 
+import ChatPage from './pages/Chat';
+
 import Message from './assets/images/message.png';
 import User from './assets/images/user.png';
 import { COLORS, styles } from './pages/styles';
@@ -111,7 +113,7 @@ export default function App() {
                     // console.log('hii');
                     navigation.navigate('Profile');
                   }}
-                  buttonStyle={{ backgroundColor: 'red' }}
+                  buttonStyle={{ backgroundColor: 'transparent' }}
                 />
               </View>
             ),
@@ -125,6 +127,7 @@ export default function App() {
             headerTitleAlign: 'center',
           })}
         />
+
         <Stack.Screen
           name='Message'
           component={MessagePage}
@@ -137,6 +140,23 @@ export default function App() {
                 <Image source={Message} style={styles.headerImg} />
               </TouchableOpacity>
             ),
+            title: 'red.',
+            headerTitleStyle: {
+              fontFamily: 'Nova-Round',
+              color: 'red',
+              fontSize: 25,
+            },
+            headerTintColor: 'black',
+            headerTitleAlign: 'center',
+            headerStyle: {
+              backgroundColor: 'whitesmoke',
+            },
+          })}
+        />
+        <Stack.Screen
+          name='Chat'
+          component={ChatPage}
+          options={({ navigation }) => ({
             title: 'red.',
             headerTitleStyle: {
               fontFamily: 'Nova-Round',
@@ -226,6 +246,7 @@ export default function App() {
             },
           })}
         />
+
         <Stack.Screen
           name='Profile'
           component={Profile}

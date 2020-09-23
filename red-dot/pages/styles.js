@@ -501,6 +501,57 @@ export const styles = StyleSheet.create({
     width: '100%',
   },
 
+    profileDescription: {
+        flexDirection: "column",
+        width: "90%",
+        alignItems: "center",
+        marginTop: 20,
+        marginHorizontal: "5%",
+        height: 250,
+        backgroundColor: "whitesmoke",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 7
+        },
+        shadowOpacity: 0.5,
+        shadowRadius: 10,
+        elevation: 20,
+        borderRadius: 5
+    },
+    profil_photo: {
+        marginTop: 10,
+        width: 100,
+        height: 100,
+        borderRadius: 50,
+    },
+    logoutBtn: {
+        backgroundColor: "red",
+        width: 60,
+        borderRadius: 5
+    },
+    logoutText: {
+        color: "whitesmoke",
+        textAlign: "center",
+        alignContent: "center"
+    },
+    titleChat: {
+        flexDirection: "row",
+        paddingLeft: 10,
+        paddingRight: 10,
+        borderBottomWidth: 1,
+        borderColor: 'rgba(0,0,0,0.2)',
+        alignItems: "center",
+        paddingBottom: 5,
+        paddingTop: 5,
+    },
+    photoChat: {
+        width: 50,
+        height: 50,
+        marginRight: 20,
+        borderRadius: 50
+    },
+
   eventPoster: {
     width: '100%',
     height: '100%',
@@ -628,4 +679,4 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     alignContent: 'center',
   },
-});
+})
