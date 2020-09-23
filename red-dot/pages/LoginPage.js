@@ -50,7 +50,15 @@ export default function Login({navigation}) {
           })
           if (result.type === 'success') {
             onSignIn(result)
-            storeData({email: result.user.email})
+              dbAuth
+              .collection("users")
+              .where("email", "==", result.user.email)
+              .get()
+              .then(querySnapshot => {
+              querySnapshot.forEach(doc => {
+                storeData({email: doc.data().email, _id: doc.id})
+              })
+              })
             navigation.navigate('Tabs')
             return result.accessToken
           } else {
@@ -80,7 +88,7 @@ export default function Login({navigation}) {
             .auth()
             .signInWithCredential(credential)
             .then(function (result) {
-              console.log(result.additionalUserInfo, "testing <<<<<<<<<")
+              // console.log(result.additionalUserInfo, "testing <<<<<<<<<")
               if (result.additionalUserInfo.isNewUser){
               
               // To realtime database:
@@ -178,13 +186,14 @@ export default function Login({navigation}) {
   // Listen for authentication state to change.
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
-      console.log(user)
+      // console.log(user)
       if (user !== null) {
         dbAuth
         .collection("users")
         .where('email', "==", user.email)
         .get()
         .then(data => {
+          // console.log(data, "dari dataaaa>>>>>>")
           if(!data) {
             return dbAuth
             .collection("users")
@@ -238,7 +247,7 @@ export default function Login({navigation}) {
           .get()
           .then(querySnapshot => {
               querySnapshot.forEach(doc => {
-                storeData({email: doc.data().email})
+                storeData({email: doc.data().email, _id: doc.id})
               })
           })
         .catch(err => {

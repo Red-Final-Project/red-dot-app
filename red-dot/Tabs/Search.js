@@ -8,34 +8,24 @@ import SeachCard from '../components/seacrhBy'
 export default function Tabs({navigation}) {
     const [searchValue, setSearchValue] = useState(null)
     const [bloodType, setBloodType] = useState('')
+    
     const searchHandler = (value) => {
-        console.log(value, "valueeee?>>>>>")
         setBloodType(value)
         let result = [];
         dbAuth
         .collection('users')
-        // .where("bloodType", "==", value)
         .get()
         .then(querySnapshot => {
             querySnapshot.forEach(doc => {
-                result.push(doc.data())
+                result.push({_id: doc.id, ...doc.data()})
             })
-            // console.log(result)
             let filtered = result.filter(card => card.bloodType === value)
-            // if(!fileted.length) return setSearchValue(null)
             setSearchValue(filtered)
         })
         .catch(err => {
             console.log(err)
         })
     }
-    // useEffect(() => {
-    //     searchHandler()
-    //     const unsubscribe = navigation.addListener('focus', () => {
-    //         searchHandler()
-    //     })
-    //     return unsubscribe 
-    // }, [searchValue])
     if(!searchValue) {
        return (
         <>
