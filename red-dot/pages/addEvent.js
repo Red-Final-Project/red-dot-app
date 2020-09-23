@@ -18,6 +18,7 @@ import Tabs from '../Tabs/Home';
 import DateImage from '../assets/images/calendar.png';
 import * as ImagePicker from 'expo-image-picker';
 import { color } from 'react-native-reanimated';
+import { ScrollView } from 'react-native-gesture-handler';
 
 if (firebase.apps.length === 0) {
   firebase.initializeApp(firebaseConfig);
@@ -62,7 +63,6 @@ export default function AddRequest({ navigation, route }) {
       setLatlang(route.params.latLang);
     }
   }, [route]);
-
 
   //   console.log(userData);
   const onChange = (event, selectedDate) => {
@@ -208,135 +208,131 @@ export default function AddRequest({ navigation, route }) {
 
   return (
     <View>
-      <View style={styles.titlesCont}>
-        <Text style={styles.titles}>Add Event</Text>
-      </View>
-      <View style={styles.containerContent}>
-        <Text style={styles.registerLabel}>Title:</Text>
-        <TextInput style={styles.registerInput} onChangeText={setTitle} />
-        <Text style={styles.registerAlert}>
-          {!title && !isTitle ? 'Title is required!' : ''}
-        </Text>
-
-        <Text style={styles.registerLabel}>Event Date:</Text>
-        <View style={styles.dateInput}>
-          <Text style={styles.dateTxt}>
-            {eventDate.getDate()}/{eventDate.getMonth()}/
-            {eventDate.getFullYear()}
-          </Text>
-          <TouchableOpacity style={styles.dateBtn} onPress={showDatePicker}>
-            <Image source={DateImage} style={styles.dateImg} />
-          </TouchableOpacity>
+      <ScrollView>
+        <View style={styles.titlesCont}>
+          <Text style={styles.textMuted}>Add Event</Text>
         </View>
-        <Text style={styles.registerAlert}>
-          {!isEventDate ? 'Date is invalid!' : ''}
-        </Text>
+        <View style={styles.containerContent}>
+          <Text style={styles.textMuted}>Title:</Text>
+          <TextInput style={styles.textInput} onChangeText={setTitle} />
+          <Text style={styles.registerAlert}>
+            {!title && !isTitle ? 'Title is required!' : ''}
+          </Text>
 
-        <Text style={styles.registerLabel}>Address:</Text>
-        <TextInput style={styles.registerInput} onChangeText={setAddress} />
-        <Text style={styles.registerAlert}>
-          {!address && !isAddress ? 'Location is required!' : ''}
-        </Text>
+          <Text style={styles.textMuted}>Event Date:</Text>
+          <View style={styles.textInput}>
+            <Text style={styles.dateTxt}>
+              {eventDate.getDate()}/{eventDate.getMonth()}/
+              {eventDate.getFullYear()}
+            </Text>
+            <TouchableOpacity style={styles.dateBtn} onPress={showDatePicker}>
+              <Image source={DateImage} style={styles.dateImg} />
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.registerAlert}>
+            {!isEventDate ? 'Date is invalid!' : ''}
+          </Text>
 
-        <View
-          style={{
-            flexDirection: 'row',
-            marginTop: 10,
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
-          <TouchableOpacity
+          <Text style={styles.textMuted}>Address:</Text>
+          <TextInput style={styles.textInput} onChangeText={setAddress} />
+          <Text style={styles.registerAlert}>
+            {!address && !isAddress ? 'Location is required!' : ''}
+          </Text>
+
+          <View
             style={{
-              borderWidth: 1,
-              borderRadius: 5,
-              borderColor: 'darkred',
-              padding: 5,
-            }}
-            onPress={() => {
-              if (!address) {
-                setIsAddress(false);
-              } else {
-                navigation.navigate('SetEventLocation', { address });
-              }
+              flexDirection: 'row',
+              marginTop: 10,
+              justifyContent: 'space-between',
+              alignItems: 'center',
             }}
           >
-            <Text style={{ color: 'darkred' }}>Set map location</Text>
-          </TouchableOpacity>
-          <Text style={styles.registerAlert}>
-            {!isLatLang ? (
-              'Map location is required!'
-            ) : (
-              <Text style={{ color: 'green' }}>
-                {latLang ? 'Map location is set' : ''}
+            <TouchableOpacity
+              style={styles.buttonPrimaryOutline}
+              onPress={() => {
+                if (!address) {
+                  setIsAddress(false);
+                } else {
+                  navigation.navigate('SetEventLocation', { address });
+                }
+              }}
+            >
+              <Text style={{ ...styles.textPrimary, textAlign: 'center' }}>
+                Set map location
               </Text>
-            )}
-          </Text>
-        </View>
+            </TouchableOpacity>
+            <Text style={styles.registerAlert}>
+              {!isLatLang ? (
+                'Map location is required!'
+              ) : (
+                <Text style={{ color: 'green' }}>
+                  {latLang ? 'Map location is set' : ''}
+                </Text>
+              )}
+            </Text>
+          </View>
 
-        {show && (
-          <DateTimePicker
-            testID='dateTimePicker'
-            value={eventDate}
-            mode={mode}
-            display='default'
-            onChange={onChange}
+          {show && (
+            <DateTimePicker
+              testID='dateTimePicker'
+              value={eventDate}
+              mode={mode}
+              display='default'
+              onChange={onChange}
+            />
+          )}
+          <Text style={styles.textMuted}>Description:</Text>
+          <TextInput
+            multiline={true}
+            numberOfLines={4}
+            onChangeText={setDescription}
+            style={styles.textInput}
+            placeholder='Add Description Here'
           />
-        )}
-        <Text style={styles.registerLabel}>Description:</Text>
-        <TextInput
-          multiline={true}
-          numberOfLines={4}
-          onChangeText={setDescription}
-          style={styles.textarea}
-          placeholder='Add Description Here'
-        />
-        <Text style={styles.registerAlert}>
-          {!description && !isDescription ? 'Description is required!' : ''}
-        </Text>
-        <Text style={styles.registerLabel}>Event Picture:</Text>
-        <View
-          style={{
-            flexDirection: 'row',
-            marginTop: 10,
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
-          <TouchableOpacity
-            style={{
-              borderWidth: 1,
-              borderRadius: 5,
-              borderColor: 'darkred',
-              padding: 5,
-            }}
-            onPress={openImagePickerAsync}
-          >
-            <Text style={{ color: 'darkred' }}>Set event picture</Text>
-          </TouchableOpacity>
           <Text style={styles.registerAlert}>
-            {!isImgUrl ? (
-              <Text>'Event picture is required!'</Text>
-            ) : progress > 0 && progress < 100 ? (
-              <Text style={{ color: 'black' }}>{`Uploading ${progress.toFixed(
-                0
-              )}%`}</Text>
-            ) : (
-              <Text style={{ color: 'green' }}>
-                {img_url ? 'Event picture is set' : ''}
-              </Text>
-            )}
+            {!description && !isDescription ? 'Description is required!' : ''}
           </Text>
+
+          <Text style={styles.textMuted}>Event Picture:</Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              marginTop: 10,
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <TouchableOpacity
+              style={styles.buttonPrimaryOutline}
+              onPress={openImagePickerAsync}
+            >
+              <Text style={{ ...styles.textPrimary, textAlign: 'center' }}>
+                Set event picture
+              </Text>
+            </TouchableOpacity>
+            <Text style={styles.registerAlert}>
+              {!isImgUrl ? (
+                <Text>'Event picture is required!'</Text>
+              ) : progress > 0 && progress < 100 ? (
+                <Text style={{ color: 'black' }}>{`Uploading ${progress.toFixed(
+                  0
+                )}%`}</Text>
+              ) : (
+                <Text style={{ color: 'green' }}>
+                  {img_url ? 'Event picture is set' : ''}
+                </Text>
+              )}
+            </Text>
+          </View>
+          <TouchableOpacity
+            style={{ ...styles.buttonPrimary, marginTop: 20 }}
+            onPress={requestHandler}
+          >
+            <Text style={styles.textWhite}>Submit</Text>
+          </TouchableOpacity>
         </View>
-      </View>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={styles.registerSubmit}
-          onPress={requestHandler}
-        >
-          <Text style={styles.registerButtonTitle}>Submit</Text>
-        </TouchableOpacity>
-      </View>
+        <View style={styles.buttonContainer}></View>
+      </ScrollView>
     </View>
   );
 }
