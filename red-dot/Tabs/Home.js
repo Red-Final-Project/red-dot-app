@@ -47,14 +47,14 @@ export default function Tabs({navigation}) {
     }
     return (
         <SafeAreaView>
-            <View style={styles.titlesCont}>
+            {/* <View style={styles.titlesCont}>
                 <Text style={styles.titles}>My Time Line</Text>
                 <TouchableOpacity onPress={() => navigation.navigate('AddRequest')}>
                     <Text style={styles.addRequest}>
                         Add Request
                     </Text>
                 </TouchableOpacity>
-            </View>
+            </View> */}
             <ScrollView 
                 style={{marginBottom: 40}}
             >

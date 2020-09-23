@@ -76,7 +76,7 @@ export default function Tabs() {
   if (latitude == null || longitude == null) {
     return (
       <View>
-        <Text>Loading...</Text>
+        {/* <Text>Loading...</Text> */}
       </View>
     );
   } else {

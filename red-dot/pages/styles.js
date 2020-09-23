@@ -1,5 +1,25 @@
-import { Dimensions, StyleSheet } from 'react-native';
+import { SplashScreen } from 'expo';
+// import {  } from 'expo-status-bar';
+import { Dimensions, StyleSheet, StatusBar, Platform } from 'react-native';
+import { color } from 'react-native-reanimated';
 const { width: screenWidth } = Dimensions.get('window');
+
+export const COLORS = {
+  primary: '#900d0d',
+  secondary: '#cf1b1b',
+  darkAlt: '#423144',
+  lightAlt: '#ffdbc5',
+  white: 'white',
+  lightPrimary: '#eeeeee',
+  darkSecondary: '#393e46',
+  darkPrimary: '#222831',
+  muted: '#C0C0C0',
+};
+
+const mlt = 8;
+
+export const SIZE = (idx) => idx * mlt;
+export const SPACE = (idx) => (idx * mlt) / 2;
 
 export const styles = StyleSheet.create({
   screenWidth,
@@ -32,10 +52,39 @@ export const styles = StyleSheet.create({
     fontSize: 10,
   },
 
+  //navigation
+  headerTitle: {
+    
+  },
+  header: {
+    backgroundColor: COLORS.lightPrimary,
+  },
+
   //reuseable
   container: {
     flex: 1,
     flexDirection: 'column',
+    backgroundColor: COLORS.lightPrimary,
+    fontFamily: 'Nova-Round',
+  },
+  containerCenter: {
+    flex: 1,
+    fontFamily: 'Nova-Round',
+    backgroundColor: COLORS.lightPrimary,
+    // flexDirection:'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 25,
+  },
+  containerContent: {
+    paddingHorizontal: SPACE(3),
+    paddingVertical: SPACE(3),
+    alignItems: 'center',
+  },
+  row: {
+    flexDirection:'row',
+    justifyContent:'space-between',
+    alignItems:'center'
   },
   fluid: {
     flexDirection: 'column',
@@ -43,10 +92,6 @@ export const styles = StyleSheet.create({
     marginTop: 10,
     marginLeft: 20,
     marginRight: 20,
-  },
-  containerContent: {
-    paddingLeft: 10,
-    paddingRight: 10,
   },
   titlesCont: {
     flexDirection: 'row',
@@ -63,118 +108,135 @@ export const styles = StyleSheet.create({
     fontSize: 20,
     color: '#708090',
   },
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover', // or 'stretch'
+  },
+
+  //welcome page
+  wpBg: {
+    paddingHorizontal: 20,
+  },
 
   //login Page
   background: {
-    flex: 1,
+    flex: 0.8,
     resizeMode: 'cover',
-    justifyContent: 'center',
+    justifyContent: 'space-evenly',
     alignItems: 'center',
+    fontFamily: 'Nova-Round',
   },
   logo: {
-    fontFamily: 'Nova-Round',
-    fontSize: 50,
-    color: 'white',
-    backgroundColor: 'red',
-    borderRadius: 10,
-    padding: 5,
+    maxHeight: screenWidth / 8,
+    resizeMode: 'contain',
+    flexWrap: 'wrap',
+    marginBottom: 'auto',
   },
   alertLogin: {
     marginTop: 50,
     color: 'rgba(240,52,52,0.7)',
     fontStyle: 'italic',
   },
-  emailLabel: {
-    marginTop: 5,
-    color: '#C0C0C0',
+  textPrimary: {
+    color: COLORS.primary,
   },
-  emailInput: {
-    height: 30,
-    width: 200,
-    borderBottomWidth: 2,
-  },
-  passwordLabel: {
-    marginTop: 20,
-    color: '#C0C0C0',
-  },
-  passwordInput: {
-    height: 30,
-    width: 200,
-    borderBottomWidth: 2,
+  textMuted: {
+    color: COLORS.muted,
+    fontSize: SIZE(1.8),
     textAlign: 'center',
   },
-  button: {
-    marginTop: 50,
-    width: 80,
-    height: 35,
-    backgroundColor: 'red',
-    alignItems: 'center',
-    borderRadius: 5,
-  },
-  loginBtn: {
+  textWhite: {
+    color: COLORS.white,
     textAlign: 'center',
-    fontSize: 20,
-    color: 'white',
+    fontSize: SIZE(2),
   },
-  textMargin: {
-    marginTop: 10,
-    color: '#C0C0C0',
+  textDarkSecondary: {
+    color: COLORS.darkSecondary,
   },
-  auth: {
-    flexDirection: 'row',
-    marginTop: 20,
+  // reuse
+  textInput: {
+    backgroundColor: COLORS.white,
+    paddingVertical: SPACE(2),
+    paddingHorizontal: SPACE(4),
+    borderRadius: SPACE(10),
+    width: screenWidth / 1.5,
+    marginVertical: SPACE(1),
+    marginHorizontal: SPACE(1),
+    // textAlign: 'center',
+    fontSize: SIZE(2),
+    color: COLORS.primary,
   },
-  facebook: {
-    width: 20,
-    height: 20,
-    marginRight: 5,
+  textInputAlert: {
+    backgroundColor: COLORS.white,
+    paddingVertical: SPACE(2),
+    paddingHorizontal: SPACE(4),
+    borderRadius: SPACE(10),
+    width: screenWidth / 1.5,
+    marginVertical: SPACE(1),
+    marginHorizontal: SPACE(1),
+    // textAlign: 'center',
+    fontSize: SIZE(2),
+    color: COLORS.primary,
+    borderColor: COLORS.lightAlt,
+    borderWidth: 3,
   },
-  google: {
-    marginLeft: 5,
-    width: 20,
-    height: 20,
+  buttonPrimary: {
+    backgroundColor: COLORS.primary,
+    paddingVertical: SPACE(2),
+    paddingHorizontal: SPACE(4),
+    borderRadius: SPACE(10),
+    width: screenWidth / 1.5,
+    marginVertical: SPACE(1),
+    marginHorizontal: SPACE(1),
+    textAlign:'center'
   },
+  buttonPrimaryOutline: {
+    // backgroundColor: COLORS.primary,
+    paddingVertical: SPACE(2),
+    paddingHorizontal: SPACE(4),
+    borderRadius: SPACE(10),
+    width: screenWidth / 1.5,
+    marginVertical: SPACE(1),
+    marginHorizontal: SPACE(1),
+    borderWidth: 1,
+    borderColor: COLORS.primary,
+    color: COLORS.primary,
+    textAlign: 'center',
 
-  //register Page
-  register: {
-    marginTop: 20,
-    color: '#c0c0c0',
+    //LOGIN
   },
-  registerBtn: {
-    textAlign: 'center',
-    color: '#c0c0c0',
-  },
-  title: {
-    fontSize: 24,
-    color: '#2f4f4f',
-    backgroundColor: 'whitesmoke',
-    paddingTop: 10,
-    paddingBottom: 5,
+  buttonRegister: {
+    color: COLORS.primary,
+    fontSize: SIZE(2.5),
     borderBottomWidth: 1,
-    borderBottomColor: '#dcdcdc',
+    paddingBottom: SPACE(1),
+    borderBottomColor: COLORS.muted,
   },
-  registerLabel: {
-    marginTop: 10,
+  socialContainer: {
+    alignItems: 'center',
   },
-  registerAlert: {
-    fontSize: 10,
-    color: 'rgba(241,52,52,0.8)',
-    fontStyle: 'italic',
-  },
-  registerInput: {
-    width: '100%',
-    borderBottomWidth: 1,
-  },
-  dateInput: {
-    marginTop: 10,
+  socialLogin: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-end',
-    borderBottomWidth: 1,
+    width: screenWidth / 4,
+    marginVertical: SPACE(2),
   },
-  dateTxt: {
-    marginBottom: 4,
+  socialButtonContainer: {
+    height: screenWidth / 10,
+    width: screenWidth / 10,
   },
+  socialButton: {
+    width: '100%',
+    height: '100%',
+  },
+  pLogin: {
+    color: COLORS.muted,
+    fontSize: SIZE(2),
+    marginVertical: SPACE(2),
+  },
+
+  //REGISTER
+
   dateBtn: {
     position: 'absolute',
     width: '100%',
@@ -183,25 +245,134 @@ export const styles = StyleSheet.create({
     marginTop: 10,
     width: 20,
     marginBottom: 8,
-    left: 320,
     height: 20,
+    left:300
   },
-  registerSubmit: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: 30,
-    width: 120,
-    backgroundColor: 'red',
-    borderRadius: 5,
-  },
-  buttonContainer: {
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  registerButtonTitle: {
-    color: 'white',
-    fontSize: 18,
-  },
+
+
+  //----
+  //----
+  //----
+  // emailLabel: {
+  //   marginTop: 5,
+  //   color: '#C0C0C0',
+  // },
+  // emailInput: {
+  //   height: 30,
+  //   width: 200,
+  //   // borderBottomWidth: 2,
+  // },
+  // passwordLabel: {
+  //   marginTop: 20,
+  //   color: '#C0C0C0',
+  // },
+  // passwordInput: {
+  //   height: 30,
+  //   width: 200,
+  //   borderBottomWidth: 2,
+  //   textAlign: 'center',
+  // },
+  // button: {
+  //   marginTop: 50,
+  //   width: 80,
+  //   height: 35,
+  //   backgroundColor: 'red',
+  //   alignItems: 'center',
+  //   borderRadius: 5,
+  // },
+  // loginBtn: {
+  //   textAlign: 'center',
+  //   fontSize: 20,
+  //   color: 'white',
+  // },
+  // textMargin: {
+  //   marginTop: 10,
+  //   color: '#C0C0C0',
+  // },
+  // auth: {
+  //   flexDirection: 'row',
+  //   marginTop: 20,
+  // },
+  // facebook: {
+  //   width: 20,
+  //   height: 20,
+  //   marginRight: 5,
+  // },
+  // google: {
+  //   marginLeft: 5,
+  //   width: 20,
+  //   height: 20,
+  // },
+
+  // //register Page
+  // register: {
+  //   marginTop: 20,
+  //   color: '#c0c0c0',
+  // },
+  // registerBtn: {
+  //   textAlign: 'center',
+  //   color: '#c0c0c0',
+  // },
+  // title: {
+  //   fontSize: 24,
+  //   color: '#2f4f4f',
+  //   backgroundColor: 'whitesmoke',
+  //   paddingTop: 10,
+  //   paddingBottom: 5,
+  //   borderBottomWidth: 1,
+  //   borderBottomColor: '#dcdcdc',
+  // },
+  // registerLabel: {
+  //   marginTop: 10,
+  // },
+  // registerAlert: {
+  //   fontSize: 10,
+  //   color: 'rgba(241,52,52,0.8)',
+  //   fontStyle: 'italic',
+  // },
+  // registerInput: {
+  //   width: '100%',
+  //   borderBottomWidth: 1,
+  // },
+  // dateInput: {
+  //   marginTop: 10,
+  //   flexDirection: 'row',
+  //   justifyContent: 'space-between',
+  //   alignItems: 'flex-end',
+  //   borderBottomWidth: 1,
+  // },
+  // dateTxt: {
+  //   marginBottom: 4,
+  // },
+  // dateBtn: {
+  //   position: 'absolute',
+  //   width: '100%',
+  // },
+  // dateImg: {
+  //   marginTop: 10,
+  //   width: 20,
+  //   marginBottom: 8,
+  //   left: 320,
+  //   height: 20,
+  // },
+  // registerSubmit: {
+  //   flexDirection: 'row',
+  //   justifyContent: 'center',
+  //   marginTop: 30,
+  //   width: 120,
+  //   backgroundColor: 'red',
+  //   borderRadius: 5,
+  // },
+  // buttonContainer: {
+  //   flexDirection: 'column',
+  //   alignItems: 'center',
+  // },
+  // registerButtonTitle: {
+  //   color: 'white',
+  //   fontSize: 18,
+  // },
+
+
 
   //Home Page
   addRequest: {
