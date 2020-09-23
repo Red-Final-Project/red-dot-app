@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -26,6 +26,10 @@ const eventsRef = db.collection('events');
 export default function Tabs({ navigation, route }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [events, setEvents] = useState([]);
+  const [value, setValue] = useState('')
+
+  // navigation.setOptions({ title: route.name });
+  // console.log(route);
 
   useEffect(() => {
     (async () => {
@@ -35,28 +39,42 @@ export default function Tabs({ navigation, route }) {
       setEvents(filteredResult);
     })();
   }, []);
-  useEffect(() => {
-    console.log('called');
-  },[]);
+  // useEffect(() => {
+  //   console.log('called');
+  // }, []);
 
-  //add test
-  useEffect(() => {
-    // (async () => {
-    //   const result = await eventsRef.add({
-    //     title: 'Lorem ipsum dolor',
-    //     img_url: 'https://picsum.photos/300',
-    //     eventDate: new Date('30 september 2020'),
-    //     location: new firebase.firestore.GeoPoint(
-    //       Math.random() * 0.03,
-    //       Math.random() * 0.03
-    //     ),
-    //     description:
-    //       'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-    //     createdDate: new Date(),
-    //   });
-    // })();
-  }, []);
-  //   console.log(events, '<<');
+  // useLayoutEffect(() => {
+  //   navigation.setOptions({
+
+  //     headerRight: () => (
+  //       <View style={styles.row}>
+  //         <Button
+  //           icon={{
+  //             name: 'user',
+  //             size: 18,
+  //             color: COLORS.primary,
+  //             type: 'simple-line-icon',
+  //           }}
+  //           onPress={() => navigation.navigate('AddRequest')}
+  //           buttonStyle={{ backgroundColor: 'red' }}
+  //         />
+         
+  //       </View>
+  //     ),
+  //   });
+  // }, [navigation]);
+  // setValue(route.params.title)
+  // useLayoutEffect(() => {
+  //   console.log(route.params, '<<<');
+  //   navigation.setOptions({
+  //     // title: value === '' ? 'No title' : value,
+  //   });
+  // }, [navigation, value]);
+  // useLayoutEffect(() => {
+    
+  //   console.log('called');
+  // },[navigation])
+
   const _renderItem = ({ item, index }) => {
     return (
       <View style={styles.carouselItem}>
