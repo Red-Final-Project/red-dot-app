@@ -14,11 +14,11 @@ export default function SeacrchCard({card}) {
     return (
         <View style={styles.searchCard}>
             <View style={styles.row}>
-                <Text>Name: {card.name}</Text>
+                <Text style={{fontFamily: 'Ubuntu-Regular'}}>Name: {card.name}</Text>
                 <Text style={styles.available}>{countThreeMonth()}</Text>
             </View>
             <View style={styles.row}>
-                <Text>Last Donor Date:  {card.last_donation_date}</Text>
+                <Text style={{fontFamily: 'Ubuntu-Regular'}}>Last Donor Date:  {card.last_donation_date}</Text>
                 <TouchableOpacity style={styles.requestSearchBtn} onPress={() => navigation.navigate('Chat', {
                     chatee: {
                         _id: card._id,

@@ -81,14 +81,20 @@ export default function AddRequest({ navigation }) {
     if (!bloodType) {
       setBloodTypeValid(false);
       validate = true;
+    } else {
+      validate = false;
     }
     if (date < new Date()) {
       setDateValid(false);
       validate = true;
+    } else {
+      validate = false;
     }
     if (!quantity) {
       setQuantityValid(false);
       validate = true;
+    } else {
+      validate = false;
     }
     if (!validate) {
       dbAuth
@@ -135,7 +141,7 @@ export default function AddRequest({ navigation }) {
           {!bloodTypeValid ? 'Blood Type Required!' : ''}
         </Text>
         <Picker
-          style={styles.textInput}
+          style={[styles.textInput, {borderRadius: 10}]}
           label='-- Choose Type --'
           selectedValue={bloodType}
           onValueChange={(val) => setBloodType(val)}
@@ -162,10 +168,10 @@ export default function AddRequest({ navigation }) {
           {!dateValid ? 'Invalid Date!' : ''}
         </Text>
         <View style={styles.textInput}>
-          <Text style={styles.dateTxt}>
-            {date.getDate()}/{date.getMonth()}/{date.getFullYear()}
-          </Text>
           <TouchableOpacity style={styles.dateBtn} onPress={showDatePicker}>
+            <Text style={styles.dateTxt}>
+              {date.getDate()}/{date.getMonth()}/{date.getFullYear()}
+            </Text>
             <Image source={DateImage} style={styles.dateImg} />
           </TouchableOpacity>
         </View>
