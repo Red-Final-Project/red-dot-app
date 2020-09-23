@@ -5,10 +5,10 @@ import {dbAuth} from '../pages/LoginPage'
 import {styles} from '../pages/styles'
 
 import SeachCard from '../components/seacrhBy'
-export default function Tabs({navigation}) {
+export default function Tabs({navigation, route}) {
     const [searchValue, setSearchValue] = useState(null)
     const [bloodType, setBloodType] = useState('')
-    
+    // console.log(route);
     const searchHandler = (value) => {
         setBloodType(value)
         let result = [];

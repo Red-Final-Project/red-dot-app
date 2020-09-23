@@ -4,7 +4,7 @@ import * as Location from 'expo-location';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import { styles } from '../pages/styles';
 
-export default function Tabs() {
+export default function Tabs({navigation, route}) {
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
   const [locations, setLocations] = useState(null);
@@ -12,6 +12,9 @@ export default function Tabs() {
   const [desLongitude, setDesLongitude] = useState(null);
   const [path, setPath] = useState([]);
   const [pathDesc, setPathDesc] = useState({});
+
+  // navigation.setOptions({ title: route.name });
+  // console.log(route);
 
   useEffect(() => {
     (async () => {

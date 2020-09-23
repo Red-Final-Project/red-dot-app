@@ -12,7 +12,8 @@ if (firebase.apps.length === 0) {
 }
   
 const dbAuth = firebase.firestore()
-export default function Tabs({navigation}) {
+export default function Tabs({navigation, route}) {
+    // console.log(route);
     const [user, setUser] = useState({})
     const [posts, setPosts] = useState([])
     const getPosts = () => {
@@ -41,7 +42,7 @@ export default function Tabs({navigation}) {
     if(!posts) {
         return (
             <View>
-                <Text>Loading...</Text>
+                {/* <Text>Loading...</Text> */}
             </View>
         )
     }
